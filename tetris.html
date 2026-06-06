@@ -277,6 +277,7 @@ function hardDrop() {
   }
   current.y--;
   score += (dist - 1) * 2;
+  updateStats();
   lockPiece();
   dropCounter = 0;
 }
