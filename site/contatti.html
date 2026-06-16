@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Contatti — REDOTS Procurement | Richiedi una demo</title>
+  <meta name="description" content="Richiedi una demo live di REDOTS Procurement. Demo (60 min) → Analisi Procurement → Proposta su misura → POC Fase 1 → Contratto. SomaMed, Milano." />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Sora:wght@600;700;800&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="css/styles.css" />
+</head>
+<body data-page="contatti">
+  <div data-layout="header"></div>
+
+  <section class="page-hero">
+    <div class="container">
+      <p class="eyebrow">Contatti</p>
+      <h1>Richiedi una<br><span class="grad">demo live</span></h1>
+      <p class="page-hero-lead">60 minuti per vedere REDOTS all’opera sui tuoi dati. Ti mostriamo normalizzazione, benchmark e agenti AI — e quantifichiamo insieme il saving potenziale.</p>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="container contact-layout">
+      <div class="contact-form-wrap reveal">
+        <h2>Parlaci di te</h2>
+        <form class="contact-form" id="demoForm" novalidate>
+          <label>Nome e cognome
+            <input type="text" name="nome" placeholder="Mario Rossi" required />
+          </label>
+          <label>Email aziendale
+            <input type="email" name="email" placeholder="mario.rossi@struttura.it" required />
+          </label>
+          <label>Organizzazione
+            <input type="text" name="org" placeholder="ASL / Distributore / Azienda pharma" />
+          </label>
+          <label>Sei interessato a…
+            <select name="lato">
+              <option value="acquisti">Lato Acquisti (struttura sanitaria)</option>
+              <option value="vendita">Lato Vendita (società commerciale)</option>
+              <option value="entrambi">Entrambi i lati</option>
+            </select>
+          </label>
+          <label>Messaggio (opzionale)
+            <textarea name="messaggio" rows="4" placeholder="Raccontaci la tua esigenza"></textarea>
+          </label>
+          <button type="submit" class="btn btn-primary btn-lg btn-block">Richiedi la demo</button>
+          <p class="form-msg" id="formMsg" role="status"></p>
+        </form>
+      </div>
+
+      <aside class="contact-aside reveal">
+        <div class="aside-card">
+          <h3>Il percorso commerciale</h3>
+          <ol class="steps">
+            <li><strong>Demo Live</strong> — 60 minuti</li>
+            <li><strong>Analisi Procurement</strong> — workshop di 1 giorno</li>
+            <li><strong>Proposta su misura</strong></li>
+            <li><strong>POC sulla Fase 1</strong></li>
+            <li><strong>Contratto</strong> Professional / Enterprise</li>
+          </ol>
+        </div>
+        <div class="aside-card">
+          <h3>SomaMed</h3>
+          <p class="aside-contact">
+            Divisione Healthcare Transformation Platform<br>
+            Via Felice Casati 32<br>
+            20124 Milano<br>
+            P.IVA 10435410963<br>
+            <a href="https://somamed.it" target="_blank" rel="noopener">somamed.it</a>
+          </p>
+        </div>
+        <div class="aside-card aside-badges">
+          <span>🔒 On-premise</span><span>⚙️ Open Source</span>
+          <span>✅ ROI 90 giorni</span><span>🛡️ MDR · NIS2 · GDPR Art. 9</span>
+        </div>
+      </aside>
+    </div>
+  </section>
+
+  <div data-layout="footer"></div>
+  <script src="js/layout.js"></script>
+</body>
+</html>

@@ -4,43 +4,14 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>REDOTS Procurement by SomaMed — La piattaforma AI per il procurement sanitario</title>
-  <meta name="description" content="REDOTS Procurement è la piattaforma AI on-premise che trasforma il procurement sanitario in leva strategica documentata. Una piattaforma, due lati della filiera, lo stesso motore intelligente." />
+  <meta name="description" content="REDOTS Procurement è la piattaforma AI on-premise che trasforma il procurement sanitario in leva strategica. Una piattaforma, due lati della filiera, lo stesso motore intelligente." />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Sora:wght@600;700;800&display=swap" rel="stylesheet" />
   <link rel="stylesheet" href="css/styles.css" />
 </head>
-<body>
-
-  <!-- ===================== HEADER ===================== -->
-  <header class="site-header" id="top">
-    <div class="container header-inner">
-      <a class="brand" href="#top">
-        <span class="brand-mark">RE<span class="dot">·</span>DOTS</span>
-        <span class="brand-sub">Procurement</span>
-      </a>
-
-      <nav class="main-nav" aria-label="Navigazione principale">
-        <ul>
-          <li><a href="#soluzioni">Soluzioni</a></li>
-          <li><a href="#piattaforma">Piattaforma</a></li>
-          <li><a href="#moduli">Moduli</a></li>
-          <li><a href="#ai">AI Agents</a></li>
-          <li><a href="#settori">Settori</a></li>
-          <li><a href="#risultati">Risultati</a></li>
-        </ul>
-      </nav>
-
-      <div class="header-cta">
-        <a href="#contatti" class="btn btn-ghost">Accedi</a>
-        <a href="#contatti" class="btn btn-primary">Richiedi una demo</a>
-      </div>
-
-      <button class="nav-toggle" aria-label="Apri menu" id="navToggle">
-        <span></span><span></span><span></span>
-      </button>
-    </div>
-  </header>
+<body data-page="home">
+  <div data-layout="header"></div>
 
   <!-- ===================== HERO ===================== -->
   <section class="hero">
@@ -54,8 +25,8 @@
         dispositivi medici, presidi sanitari e farmaci.
       </p>
       <div class="hero-actions">
-        <a href="#contatti" class="btn btn-primary btn-lg">Richiedi una demo</a>
-        <a href="#piattaforma" class="btn btn-outline btn-lg">Scopri la piattaforma</a>
+        <a href="contatti.html" class="btn btn-primary btn-lg">Richiedi una demo</a>
+        <a href="piattaforma.html" class="btn btn-outline btn-lg">Scopri la piattaforma</a>
       </div>
       <div class="hero-badges">
         <span class="badge">🔒 On-premise · GDPR Art. 9 by design</span>
@@ -81,69 +52,80 @@
     </div>
   </section>
 
-  <!-- ===================== VALUE PILLARS ===================== -->
-  <section class="section" id="soluzioni">
+  <!-- ===================== STRENGTHS (punti di forza) ===================== -->
+  <section class="section" id="forza">
     <div class="container">
-      <div class="section-head">
-        <p class="kicker">Perché REDOTS</p>
-        <h2>Sei modi per trasformare il tuo procurement</h2>
-        <p class="section-sub">Superare la logica del prezzo più basso a favore del valore reale di ogni bene.</p>
+      <div class="section-head reveal">
+        <p class="kicker">I punti di forza</p>
+        <h2>Sei vantaggi che nessun altro mette insieme</h2>
+        <p class="section-sub">Non un gestionale in più: l’unica piattaforma che unisce normalizzazione dati, AI specializzata on-premise e compliance built-in.</p>
       </div>
-
-      <div class="pillars">
-        <article class="pillar">
-          <div class="pillar-icon">🛒</div>
-          <h3>Compra meglio</h3>
-          <p>Prezzo, qualità, TCO e conformità in un’unica decisione documentata.</p>
+      <div class="strengths">
+        <article class="strength reveal">
+          <span class="strength-no">01</span>
+          <h3>AI 100% on-premise</h3>
+          <p>Modelli Llama 3.1 e Mistral eseguiti dentro le mura del cliente. <strong>Zero data out</strong>, GDPR Art. 9 by design, compliance NIS2 — laddove i concorrenti usano cloud proprietari.</p>
         </article>
-        <article class="pillar">
-          <div class="pillar-icon">📊</div>
-          <h3>Controlla meglio</h3>
-          <p>Ogni euro normalizzato CND/ATC, ogni decisione tracciata e auditabile.</p>
+        <article class="strength reveal">
+          <span class="strength-no">02</span>
+          <h3>Una piattaforma, due lati</h3>
+          <p>Lo stesso motore serve <strong>simultaneamente</strong> chi acquista e chi vende. Una struttura può “vedere” il proprio fornitore sulla stessa piattaforma — e viceversa.</p>
         </article>
-        <article class="pillar">
-          <div class="pillar-icon">🤝</div>
-          <h3>Negozia meglio</h3>
-          <p>Leva negoziale documentata con dati di performance e benchmark di mercato.</p>
+        <article class="strength reveal">
+          <span class="strength-no">03</span>
+          <h3>13 agenti AI specializzati</h3>
+          <p>Non un agente generico, ma <strong>un esperto dedicato</strong> per ogni famiglia di prodotto: impiantabili, IVD, biosimilari, originator e altro.</p>
         </article>
-        <article class="pillar">
-          <div class="pillar-icon">🗂️</div>
-          <h3>Documenta meglio</h3>
-          <p>Audit trail completo D.lgs 36/2023, GDPR Art. 9 by design.</p>
+        <article class="strength reveal">
+          <span class="strength-no">04</span>
+          <h3>Normalizzazione cross-standard</h3>
+          <p>CND · EMDN · GMDN · ATC · AIC · NDC FDA. Lo stesso dispositivo o farmaco diventa <strong>confrontabile</strong> su gare CONSIP, TED europee e mercato USA.</p>
         </article>
-        <article class="pillar">
-          <div class="pillar-icon">📈</div>
-          <h3>Vendi meglio</h3>
-          <p>Posizionamento data-driven, marginalità protetta, gare risposte in minuti.</p>
+        <article class="strength reveal">
+          <span class="strength-no">05</span>
+          <h3>Compliance built-in</h3>
+          <p>Audit trail immutabile <strong>D.lgs 36/2023</strong>, supporto ai controlli ANAC e Corte dei Conti, conformità MDR e NIS2 integrate, non aggiunte dopo.</p>
         </article>
-        <article class="pillar">
-          <div class="pillar-icon">⚡</div>
-          <h3>Decidi prima</h3>
-          <p>Da dati frammentati a decisioni misurabili, documentate e proattive.</p>
+        <article class="strength reveal">
+          <span class="strength-no">06</span>
+          <h3>Conoscenza di dominio nativa</h3>
+          <p>Ereditata dalle <strong>4 divisioni SomaMed</strong>: sistemi sanitari, dispositivi medici, formazione clinica. Non un software generalista riadattato alla sanità.</p>
         </article>
       </div>
     </div>
   </section>
 
-  <!-- ===================== TWO-SIDED PLATFORM ===================== -->
-  <section class="section section-alt" id="piattaforma">
+  <!-- ===================== VALUE PILLARS ===================== -->
+  <section class="section section-alt" id="soluzioni">
     <div class="container">
-      <div class="section-head">
+      <div class="section-head reveal">
+        <p class="kicker">Perché REDOTS</p>
+        <h2>Sei modi per trasformare il tuo procurement</h2>
+        <p class="section-sub">Superare la logica del prezzo più basso a favore del valore reale di ogni bene.</p>
+      </div>
+      <div class="pillars">
+        <article class="pillar reveal"><div class="pillar-icon">🛒</div><h3>Compra meglio</h3><p>Prezzo, qualità, TCO e conformità in un’unica decisione documentata.</p></article>
+        <article class="pillar reveal"><div class="pillar-icon">📊</div><h3>Controlla meglio</h3><p>Ogni euro normalizzato CND/ATC, ogni decisione tracciata e auditabile.</p></article>
+        <article class="pillar reveal"><div class="pillar-icon">🤝</div><h3>Negozia meglio</h3><p>Leva negoziale documentata con dati di performance e benchmark di mercato.</p></article>
+        <article class="pillar reveal"><div class="pillar-icon">🗂️</div><h3>Documenta meglio</h3><p>Audit trail completo D.lgs 36/2023, GDPR Art. 9 by design.</p></article>
+        <article class="pillar reveal"><div class="pillar-icon">📈</div><h3>Vendi meglio</h3><p>Posizionamento data-driven, marginalità protetta, gare risposte in minuti.</p></article>
+        <article class="pillar reveal"><div class="pillar-icon">⚡</div><h3>Decidi prima</h3><p>Da dati frammentati a decisioni misurabili, documentate e proattive.</p></article>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===================== TWO-SIDED PLATFORM ===================== -->
+  <section class="section" id="piattaforma">
+    <div class="container">
+      <div class="section-head reveal">
         <p class="kicker">Una piattaforma · Due lati della filiera</p>
         <h2>Lo stesso motore intelligente, per chi compra e per chi vende</h2>
-        <p class="section-sub">
-          Lo stesso motore di normalizzazione (CND/EMDN/ATC), gli stessi agenti AI specializzati
-          e gli stessi dati di gara ANAC/TED — al servizio di entrambi i lati del mercato.
-        </p>
+        <p class="section-sub">Stesso motore di normalizzazione, stessi agenti AI, stessi dati di gara ANAC/TED — al servizio di entrambi i lati del mercato.</p>
       </div>
-
       <div class="twosided">
-        <article class="side side-buy">
-          <header>
-            <span class="side-tag">Lato Acquisti</span>
-            <h3>Strutture sanitarie</h3>
-            <p>Ospedali, ASL, AO, IRCCS, cliniche private e centrali di acquisto regionali.</p>
-          </header>
+        <article class="side side-buy reveal">
+          <header><span class="side-tag">Lato Acquisti</span><h3>Strutture sanitarie</h3>
+          <p>Ospedali, ASL, AO, IRCCS, cliniche private e centrali di acquisto regionali.</p></header>
           <ul class="ticks">
             <li>Benchmark automatico su gare ANAC / TED / CONSIP</li>
             <li>Spending analysis classificata CND/ATC a 3 livelli</li>
@@ -151,19 +133,15 @@
             <li>Budget per CdC con blocco automatico extra-budget</li>
             <li>Valutazione su TCO completo, non solo prezzo</li>
           </ul>
+          <a href="soluzioni.html#acquisti" class="link-arrow">Approfondisci lato acquisti →</a>
         </article>
-
-        <div class="engine">
+        <div class="engine reveal">
           <div class="engine-core">AI<br>ENGINE</div>
           <p>Normalizzazione · 13 Agenti AI · On-premise</p>
         </div>
-
-        <article class="side side-sell">
-          <header>
-            <span class="side-tag">Lato Vendita</span>
-            <h3>Società commerciali</h3>
-            <p>Distributori, grossisti pharma, aziende pharma e produttori di dispositivi medici.</p>
-          </header>
+        <article class="side side-sell reveal">
+          <header><span class="side-tag">Lato Vendita</span><h3>Società commerciali</h3>
+          <p>Distributori, grossisti pharma, aziende pharma e produttori di dispositivi medici.</p></header>
           <ul class="ticks">
             <li>Posizionamento prezzo P25 / P50 / P75 su ogni offerta</li>
             <li>Risposta a gare in minuti con MDR/AIC pre-associati al SKU</li>
@@ -171,343 +149,65 @@
             <li>Forecast domanda per SKU × cliente, magazzino ottimizzato</li>
             <li>Marginalità protetta con pricing data-driven</li>
           </ul>
+          <a href="soluzioni.html#vendita" class="link-arrow">Approfondisci lato vendita →</a>
         </article>
       </div>
-
-      <p class="synergy-note">
-        💡 <strong>Sinergia unica:</strong> una struttura sanitaria può “vedere” il proprio fornitore
-        sulla stessa piattaforma — e viceversa.
-      </p>
-    </div>
-  </section>
-
-  <!-- ===================== CORE MODULES ===================== -->
-  <section class="section" id="moduli">
-    <div class="container">
-      <div class="section-head">
-        <p class="kicker">Funzionalità principali</p>
-        <h2>5 moduli core, 8 moduli operativi</h2>
-        <p class="section-sub">Architettura a microservizi: ogni modulo è attivabile indipendentemente e aggiornabile senza fermare la piattaforma.</p>
-      </div>
-
-      <div class="cards-grid">
-        <article class="card">
-          <span class="card-num">01</span>
-          <h3>Benchmark Prezzi</h3>
-          <p>Confronto automatico con prezzi reali aggiudicati su ANAC, TED, CONSIP. Percentili P25/P50/P75 per CND/ATC × area × tipo gara. Query sotto i 100 ms, flag automatici sopra il P75.</p>
-        </article>
-        <article class="card">
-          <span class="card-num">02</span>
-          <h3>Gestione RFQ</h3>
-          <p>Dall’invio SMTP ai fornitori qualificati al parsing OCR+LLM delle offerte PDF, fino alla tabella comparativa con confidence score per ogni campo.</p>
-        </article>
-        <article class="card">
-          <span class="card-num">03</span>
-          <h3>Contratti &amp; SLA</h3>
-          <p>Drift score mensile per controparte (puntualità, stabilità prezzi, qualità, conformità). Alert 30/60 giorni prima delle scadenze con report di rinegoziazione.</p>
-        </article>
-        <article class="card">
-          <span class="card-num">04</span>
-          <h3>Scorte Predittive</h3>
-          <p>Previsione consumi per CND × reparto e forecast domanda per SKU × cliente. Riordino suggerito prima della rottura, zero ordini d’urgenza.</p>
-        </article>
-        <article class="card">
-          <span class="card-num">05</span>
-          <h3>Alert Normativo</h3>
-          <p>Monitoring giornaliero EUR-Lex, ANAC, TED, Eudamed, AIFA. Match automatico sui CND/ATC del catalogo con azione richiesta in italiano e timeline di adeguamento.</p>
-        </article>
-        <article class="card card-accent">
-          <span class="card-num">+8</span>
-          <h3>Moduli operativi</h3>
-          <p>DSH Dashboard · ODA Ordini · FOR Fornitori · SPA Spend Analysis · ECO Analisi Economica · BDG Budget · TOM Med Apparecchiature · DOT.OCR Document Intelligence.</p>
-        </article>
-      </div>
-    </div>
-  </section>
-
-  <!-- ===================== AI AGENTS ===================== -->
-  <section class="section section-dark" id="ai">
-    <div class="container">
-      <div class="section-head">
-        <p class="kicker kicker-light">Intelligenza Artificiale</p>
-        <h2>13 agenti AI specializzati per dominio</h2>
-        <p class="section-sub section-sub-light">
-          Non un agente generico, ma un esperto dedicato per ogni famiglia di prodotto.
-          Gli agenti ragionano sul contesto, leggono documenti e producono raccomandazioni motivate in italiano.
-        </p>
-      </div>
-
-      <div class="agents">
-        <div class="agent-group">
-          <h4>7 agenti per dominio prodotto</h4>
-          <div class="chips">
-            <span>DM Impiantabili</span><span>DM Consumabili</span><span>DM Capitale</span>
-            <span>IVD</span><span>Farmaci Originator</span><span>Farmaci Generici</span><span>Biosimilari</span>
-          </div>
-        </div>
-        <div class="agent-group">
-          <h4>5 agenti operativi trasversali</h4>
-          <div class="chips">
-            <span>BestBuy</span><span>RFQ</span><span>Normativa</span><span>Budget</span><span>Contratti</span>
-          </div>
-        </div>
-        <div class="agent-group">
-          <h4>1 agente BI conversazionale</h4>
-          <div class="chips">
-            <span>Interroga il corpus dati in linguaggio naturale, in italiano</span>
-          </div>
-        </div>
-      </div>
-
-      <div class="standards">
-        <p>Codifiche cross-standard normalizzate automaticamente con RAG + LLM</p>
-        <div class="standards-list">
-          <span>CND</span><span>EMDN</span><span>GMDN</span><span>ATC</span><span>AIC</span>
-          <span>NDC FDA</span><span>EDMA</span><span>FDA 21 CFR 866-892</span>
-        </div>
-      </div>
+      <p class="synergy-note reveal">💡 <strong>Sinergia unica:</strong> una struttura sanitaria può “vedere” il proprio fornitore sulla stessa piattaforma — e viceversa.</p>
     </div>
   </section>
 
   <!-- ===================== RESULTS / KPIs ===================== -->
-  <section class="section" id="risultati">
+  <section class="section section-alt" id="risultati">
     <div class="container">
-      <div class="section-head">
+      <div class="section-head reveal">
         <p class="kicker">Numeri chiave</p>
         <h2>Risultati misurabili, primo ROI a 90 giorni</h2>
       </div>
-
       <div class="kpis">
-        <div class="kpi"><span class="kpi-num">5–15%</span><span class="kpi-label">Saving annuo lato acquisti</span></div>
-        <div class="kpi"><span class="kpi-num">&lt;24h</span><span class="kpi-label">Approvazione PR (da 5-7 giorni)</span></div>
-        <div class="kpi"><span class="kpi-num">100%</span><span class="kpi-label">Spesa classificata CND/ATC</span></div>
-        <div class="kpi"><span class="kpi-num">−60%</span><span class="kpi-label">Data entry manuale</span></div>
-        <div class="kpi"><span class="kpi-num">+15/25%</span><span class="kpi-label">Tasso aggiudicazione gare</span></div>
-        <div class="kpi"><span class="kpi-num">&lt;15min</span><span class="kpi-label">Risposta a gara (da 2-4 ore)</span></div>
-        <div class="kpi"><span class="kpi-num">−60%</span><span class="kpi-label">Ordini d’urgenza</span></div>
-        <div class="kpi"><span class="kpi-num">90 gg</span><span class="kpi-label">Primo ROI misurabile</span></div>
+        <div class="kpi reveal"><span class="kpi-num">5–15%</span><span class="kpi-label">Saving annuo lato acquisti</span></div>
+        <div class="kpi reveal"><span class="kpi-num">&lt;24h</span><span class="kpi-label">Approvazione PR (da 5-7 giorni)</span></div>
+        <div class="kpi reveal"><span class="kpi-num">100%</span><span class="kpi-label">Spesa classificata CND/ATC</span></div>
+        <div class="kpi reveal"><span class="kpi-num">−60%</span><span class="kpi-label">Data entry manuale</span></div>
+        <div class="kpi reveal"><span class="kpi-num">+15/25%</span><span class="kpi-label">Tasso aggiudicazione gare</span></div>
+        <div class="kpi reveal"><span class="kpi-num">&lt;15min</span><span class="kpi-label">Risposta a gara (da 2-4 ore)</span></div>
+        <div class="kpi reveal"><span class="kpi-num">−60%</span><span class="kpi-label">Ordini d’urgenza</span></div>
+        <div class="kpi reveal"><span class="kpi-num">90 gg</span><span class="kpi-label">Primo ROI misurabile</span></div>
+      </div>
+      <div class="center-cta reveal"><a href="risultati.html" class="btn btn-outline btn-lg">Vedi tutti i risultati →</a></div>
+    </div>
+  </section>
+
+  <!-- ===================== AI TEASER ===================== -->
+  <section class="section section-dark">
+    <div class="container ai-teaser">
+      <div class="ai-teaser-text reveal">
+        <p class="kicker kicker-light">Intelligenza Artificiale on-premise</p>
+        <h2>13 agenti AI specializzati per dominio</h2>
+        <p class="section-sub section-sub-light">Non un agente generico, ma un esperto dedicato per ogni famiglia di prodotto. Gli agenti ragionano sul contesto, leggono documenti e producono raccomandazioni motivate in italiano — senza che un solo dato esca dal perimetro del cliente.</p>
+        <a href="piattaforma.html#ai" class="btn btn-primary btn-lg">Esplora l’architettura AI →</a>
+      </div>
+      <div class="ai-teaser-chips reveal">
+        <span>DM Impiantabili</span><span>DM Consumabili</span><span>DM Capitale</span>
+        <span>IVD</span><span>Originator</span><span>Generici</span><span>Biosimilari</span>
+        <span>BestBuy</span><span>RFQ</span><span>Normativa</span><span>Budget</span>
+        <span>Contratti</span><span>BI conversazionale</span>
       </div>
     </div>
   </section>
 
-  <!-- ===================== SECTORS / USERS ===================== -->
-  <section class="section section-alt" id="settori">
-    <div class="container">
-      <div class="section-head">
-        <p class="kicker">Utenti target</p>
-        <h2>Pensata per ogni ruolo della filiera</h2>
-      </div>
-
-      <div class="sectors">
-        <div class="sector-col">
-          <h3>🏥 Strutture sanitarie</h3>
-          <ul>
-            <li><strong>Direzione Acquisti</strong> — leva negoziale documentata, vendor rating continuo</li>
-            <li><strong>Buyer sanitari</strong> — PR strutturate con CND e budget verificato</li>
-            <li><strong>Direzione Generale</strong> — dashboard con KPI e saving catturabile</li>
-            <li><strong>Farmacia Ospedaliera</strong> — equivalenze, switch biosimilari, alert AIFA</li>
-            <li><strong>Ingegneria Clinica</strong> — TOM Med, censimento EMDN, TCO 10 anni</li>
-            <li><strong>Ufficio Gare</strong> — dossier comparativi, ODA, conformità D.lgs 36/2023</li>
-          </ul>
-        </div>
-        <div class="sector-col">
-          <h3>🚚 Società commerciali</h3>
-          <ul>
-            <li><strong>Direzione Commerciale</strong> — tasso di aggiudicazione, marginalità protetta</li>
-            <li><strong>Pricing &amp; Tender Management</strong> — posizionamento P25/P50/P75</li>
-            <li><strong>Direzione Operations</strong> — catalogo allineato MDR/AIFA in tempo reale</li>
-            <li><strong>Distributori &amp; grossisti pharma</strong> — CPQ sanitario data-driven</li>
-            <li><strong>Aziende pharma</strong> — forecast domanda per cliente, working capital liberato</li>
-            <li><strong>Produttori DM</strong> — documentazione MDR sempre associata allo SKU</li>
-          </ul>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <!-- ===================== TIERS ===================== -->
-  <section class="section" id="tiers">
-    <div class="container">
-      <div class="section-head">
-        <p class="kicker">Configurazioni commerciali</p>
-        <h2>Un piano per ogni dimensione</h2>
-        <p class="section-sub">Pricing personalizzato — Direzione Commerciale SomaMed.</p>
-      </div>
-
-      <div class="pricing">
-        <article class="plan">
-          <h3>Starter</h3>
-          <p class="plan-target">Ospedale singolo · Clinica privata<br>Distributore locale · Grossista monoregione</p>
-          <ul class="ticks">
-            <li>Modulo Benchmark</li>
-            <li>Modulo Budget</li>
-            <li>Dashboard direzionale</li>
-            <li>SLA Business hours</li>
-          </ul>
-          <a href="#contatti" class="btn btn-outline btn-block">Parla con noi</a>
-        </article>
-
-        <article class="plan plan-featured">
-          <span class="plan-flag">⭐ Più scelto</span>
-          <h3>Professional</h3>
-          <p class="plan-target">ASL · AO multi-presidio<br>Distributore multi-regione · Grossista pharma</p>
-          <ul class="ticks">
-            <li>Tutti i moduli Fase 1 e 2</li>
-            <li>Agente Normativa + Agente BI</li>
-            <li>LLM Mistral-7B on-premise</li>
-            <li>SLA H12 · 5gg · 4h response</li>
-          </ul>
-          <a href="#contatti" class="btn btn-primary btn-block">Richiedi una demo</a>
-        </article>
-
-        <article class="plan">
-          <h3>Enterprise</h3>
-          <p class="plan-target">IRCCS · Reti ospedaliere regionali<br>Produttore DM/pharma · Distributore nazionale</p>
-          <ul class="ticks">
-            <li>Piattaforma completa</li>
-            <li>LLM fine-tuning su dati cliente</li>
-            <li>Customizzazione regionale</li>
-            <li>SLA H24 · 7gg · 1h response</li>
-          </ul>
-          <a href="#contatti" class="btn btn-outline btn-block">Parla con noi</a>
-        </article>
-      </div>
-    </div>
-  </section>
-
-  <!-- ===================== ROADMAP ===================== -->
-  <section class="section section-alt" id="roadmap">
-    <div class="container">
-      <div class="section-head">
-        <p class="kicker">Roadmap di implementazione</p>
-        <h2>Deploy modulare e progressivo</h2>
-      </div>
-
-      <div class="timeline">
-        <div class="phase">
-          <span class="phase-time">Mesi 1-2</span>
-          <h3>Fase 1 — Go-live Core</h3>
-          <p>Knowledge system + Normalizzazione CND/ATC + Benchmark ANAC/TED/CONSIP + Verifica budget + Dashboard operativa.</p>
-          <p class="phase-value">→ Primo risparmio misurabile a 90 giorni</p>
-        </div>
-        <div class="phase">
-          <span class="phase-time">Mesi 3-4</span>
-          <h3>Fase 2 — Agenti e RFQ</h3>
-          <p>RFQ automatizzata (SMTP/IMAP/OCR/LLM) + Monitoraggio contratti con drift score + Agente ODA + Customer rating.</p>
-          <p class="phase-value">→ Ciclo offerte automatizzato · zero contratti scaduti</p>
-        </div>
-        <div class="phase">
-          <span class="phase-time">Mesi 5-6</span>
-          <h3>Fase 3 — AI Avanzata</h3>
-          <p>LLM on-premise fine-tuned + Agente Normativa MDR/ANAC/AIFA + Scorte predittive + Agente BI conversazionale.</p>
-          <p class="phase-value">→ Compliance proattiva · sistema autonomo H24</p>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <!-- ===================== DIFFERENTIATION ===================== -->
-  <section class="section" id="differenza">
-    <div class="container">
-      <div class="section-head">
-        <p class="kicker">Differenziazione</p>
-        <h2>Perché REDOTS è diverso</h2>
-      </div>
-      <div class="diff">
-        <div class="diff-col diff-not">
-          <h3>REDOTS non è</h3>
-          <ul>
-            <li>Un gestionale tradizionale</li>
-            <li>Un archivio dati statico</li>
-            <li>Un cruscotto di reportistica</li>
-            <li>Una somma di tool isolati</li>
-          </ul>
-        </div>
-        <div class="diff-col diff-is">
-          <h3>REDOTS è</h3>
-          <ul>
-            <li>Una piattaforma intelligente che aggrega, normalizza e interpreta i dati</li>
-            <li>Un sistema integrato dove ogni pilastro alimenta gli altri</li>
-            <li>L’unica piattaforma che serve simultaneamente i due lati della filiera</li>
-            <li>AI specializzata per dominio, on-premise, GDPR Art. 9 by design</li>
-            <li>100% open source — zero lock-in, deploy on-premise / cloud ibrido / air-gap</li>
-          </ul>
-        </div>
-      </div>
-
-      <div class="tech-strip">
-        <span>NVIDIA AI Blueprints</span><span>Llama 3.1</span><span>Mistral</span>
-        <span>MongoDB</span><span>TensorRT-LLM</span><span>Microservizi</span>
-      </div>
-    </div>
-  </section>
-
-  <!-- ===================== CTA / CONTACT ===================== -->
-  <section class="cta-band" id="contatti">
-    <div class="container cta-inner">
+  <!-- ===================== CTA BAND ===================== -->
+  <section class="cta-band">
+    <div class="container cta-inner reveal">
       <h2>Trasforma il tuo procurement sanitario</h2>
-      <p>Una piattaforma AI on-premise, due lati della filiera, lo stesso motore intelligente.
-         Production-ready, primo ROI a 90 giorni.</p>
-      <form class="cta-form" id="demoForm" novalidate>
-        <input type="text" name="nome" placeholder="Nome e cognome" required />
-        <input type="email" name="email" placeholder="Email aziendale" required />
-        <input type="text" name="org" placeholder="Organizzazione" />
-        <button type="submit" class="btn btn-primary btn-lg">Richiedi una demo live</button>
-      </form>
-      <p class="cta-flow">Demo Live (60 min) → Analisi Procurement (workshop) → Proposta su misura → POC Fase 1 → Contratto</p>
-      <p class="form-msg" id="formMsg" role="status"></p>
+      <p>Una piattaforma AI on-premise, due lati della filiera, lo stesso motore intelligente. Production-ready, primo ROI a 90 giorni.</p>
+      <div class="hero-actions" style="justify-content:center">
+        <a href="contatti.html" class="btn btn-primary btn-lg" style="background:var(--navy)">Richiedi una demo live</a>
+        <a href="soluzioni.html" class="btn btn-outline btn-lg" style="border-color:#fff;color:#fff">Esplora le soluzioni</a>
+      </div>
     </div>
   </section>
 
-  <!-- ===================== FOOTER ===================== -->
-  <footer class="site-footer">
-    <div class="container footer-grid">
-      <div class="footer-brand">
-        <span class="brand-mark">RE<span class="dot">·</span>DOTS</span>
-        <p>La piattaforma AI on-premise per il procurement sanitario. By SomaMed — Healthcare Transformation Platform.</p>
-      </div>
-      <div class="footer-col">
-        <h4>Soluzioni</h4>
-        <ul>
-          <li><a href="#piattaforma">Lato Acquisti</a></li>
-          <li><a href="#piattaforma">Lato Vendita</a></li>
-          <li><a href="#moduli">Moduli core</a></li>
-          <li><a href="#ai">AI Agents</a></li>
-        </ul>
-      </div>
-      <div class="footer-col">
-        <h4>Piattaforma</h4>
-        <ul>
-          <li><a href="#ai">Architettura AI</a></li>
-          <li><a href="#differenza">Open source</a></li>
-          <li><a href="#differenza">Sicurezza &amp; RBAC</a></li>
-          <li><a href="#roadmap">Roadmap</a></li>
-        </ul>
-      </div>
-      <div class="footer-col">
-        <h4>Azienda</h4>
-        <ul>
-          <li><a href="#settori">Settori</a></li>
-          <li><a href="#risultati">Risultati</a></li>
-          <li><a href="#contatti">Contatti</a></li>
-          <li><a href="https://somamed.it" target="_blank" rel="noopener">somamed.it</a></li>
-        </ul>
-      </div>
-      <div class="footer-col">
-        <h4>SomaMed</h4>
-        <ul class="footer-contact">
-          <li>Via Felice Casati 32</li>
-          <li>20124 Milano</li>
-          <li>P.IVA 10435410963</li>
-        </ul>
-      </div>
-    </div>
-    <div class="container footer-bottom">
-      <p>© 2026 SomaMed S.r.l. — REDOTS Procurement. Tutti i diritti riservati.</p>
-      <p class="footer-compliance">MDR · NIS2 · D.lgs 36/2023 · GDPR Art. 9 by design</p>
-    </div>
-  </footer>
-
-  <script src="js/script.js"></script>
+  <div data-layout="footer"></div>
+  <script src="js/layout.js"></script>
 </body>
 </html>
