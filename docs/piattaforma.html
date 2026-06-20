@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Piattaforma — REDOTS Procurement | AI on-premise, moduli, compliance</title>
+  <meta name="description" content="L'architettura di REDOTS Procurement: 13 agenti AI specializzati, stack 100% open source on-premise, 13 moduli, sicurezza RBAC e compliance MDR/NIS2/D.lgs 36/2023 by design." />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Sora:wght@600;700;800&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="css/styles.css" />
+</head>
+<body data-page="piattaforma">
+  <div data-layout="header"></div>
+
+  <section class="page-hero">
+    <div class="container">
+      <p class="eyebrow">Piattaforma</p>
+      <h1>AI specializzata.<br><span class="grad">100% on-premise.</span></h1>
+      <p class="page-hero-lead">Sopra dati normalizzati contro le codifiche ufficiali, 13 agenti AI ragionano sul contesto e producono raccomandazioni motivate in italiano. Tutto dentro il perimetro del cliente — zero data out.</p>
+      <div class="quick-jump">
+        <a href="#ai" class="btn btn-outline">↓ Agenti AI</a>
+        <a href="#moduli" class="btn btn-outline">↓ Moduli</a>
+        <a href="#sicurezza" class="btn btn-outline">↓ Sicurezza</a>
+        <a href="#compliance" class="btn btn-outline">↓ Compliance</a>
+        <a href="#roadmap" class="btn btn-outline">↓ Roadmap</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- HOW IT WORKS -->
+  <section class="section" id="come">
+    <div class="container">
+      <div class="section-head reveal"><p class="kicker">Come funziona</p><h2>Dai dati grezzi alle decisioni documentate</h2></div>
+      <div class="flow">
+        <div class="flow-step reveal"><span class="flow-no">1</span><h3>Integrazione</h3><p>Collegamento a ERP e gestionali (SAP MM, Oracle, gestionali sanitari, API REST) e ai cataloghi delle società commerciali.</p></div>
+        <div class="flow-arrow">→</div>
+        <div class="flow-step reveal"><span class="flow-no">2</span><h3>Normalizzazione</h3><p>I dati grezzi vengono normalizzati contro CND, EMDN, GMDN, ATC, AIC, NDC FDA, EDMA.</p></div>
+        <div class="flow-arrow">→</div>
+        <div class="flow-step reveal"><span class="flow-no">3</span><h3>Ragionamento AI</h3><p>13 agenti specializzati interpretano contesto e documenti, producendo raccomandazioni motivate.</p></div>
+        <div class="flow-arrow">→</div>
+        <div class="flow-step reveal"><span class="flow-no">4</span><h3>Decisione tracciata</h3><p>Ogni scelta è documentata in un audit trail immutabile, conforme D.lgs 36/2023.</p></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- AI AGENTS -->
+  <section class="section section-dark" id="ai">
+    <div class="container">
+      <div class="section-head reveal"><p class="kicker kicker-light">Intelligenza Artificiale</p><h2>13 agenti AI specializzati</h2>
+        <p class="section-sub section-sub-light">Gli agenti non eseguono regole fisse: ragionano sul contesto, leggono documenti e producono raccomandazioni motivate in italiano.</p></div>
+      <div class="agents">
+        <div class="agent-group reveal"><h4>7 agenti per dominio prodotto</h4>
+          <div class="chips"><span>DM Impiantabili</span><span>DM Consumabili</span><span>DM Capitale</span><span>IVD</span><span>Farmaci Originator</span><span>Farmaci Generici</span><span>Biosimilari</span></div>
+          <p class="agent-note">Ciascuno con logica propria: biocompatibilità, TCO, vincolo strumento-reagente, switch biosimilari…</p>
+        </div>
+        <div class="agent-group reveal"><h4>5 agenti operativi trasversali</h4>
+          <div class="chips"><span>BestBuy</span><span>RFQ</span><span>Normativa</span><span>Budget</span><span>Contratti</span></div>
+          <p class="agent-note">Operano su tutta la filiera, indipendentemente dalla famiglia di prodotto.</p>
+        </div>
+        <div class="agent-group reveal"><h4>1 agente BI conversazionale</h4>
+          <div class="chips"><span>Interroga il corpus dati in linguaggio naturale, in italiano</span></div>
+          <p class="agent-note">Chiedi “quanto ho speso in stent nel 2025 vs 2024?” e ottieni la risposta.</p>
+        </div>
+      </div>
+      <div class="standards reveal"><p>Codifiche cross-standard normalizzate automaticamente con RAG + LLM</p>
+        <div class="standards-list"><span>CND</span><span>EMDN</span><span>GMDN</span><span>ATC</span><span>AIC</span><span>NDC FDA</span><span>EDMA</span><span>FDA 21 CFR 866-892</span></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- MODULES -->
+  <section class="section" id="moduli">
+    <div class="container">
+      <div class="section-head reveal"><p class="kicker">Funzionalità</p><h2>5 moduli core, 8 moduli operativi</h2>
+        <p class="section-sub">Architettura a microservizi: ogni modulo è attivabile indipendentemente e aggiornabile senza fermare la piattaforma.</p></div>
+      <h3 class="block-title reveal">5 moduli core</h3>
+      <div class="cards-grid">
+        <article class="card reveal"><span class="card-num">01</span><h3>Benchmark Prezzi</h3><p>Confronto con prezzi reali aggiudicati su ANAC, TED, CONSIP. Percentili per CND/ATC × area × tipo gara, query &lt;100 ms, flag sopra il P75.</p></article>
+        <article class="card reveal"><span class="card-num">02</span><h3>Gestione RFQ</h3><p>Dall’invio SMTP al parsing OCR+LLM delle offerte PDF, fino alla tabella comparativa con confidence score per campo.</p></article>
+        <article class="card reveal"><span class="card-num">03</span><h3>Contratti &amp; SLA</h3><p>Drift score mensile per controparte. Alert 30/60 giorni prima delle scadenze con report di rinegoziazione automatico.</p></article>
+        <article class="card reveal"><span class="card-num">04</span><h3>Scorte Predittive</h3><p>Previsione consumi per CND × reparto e forecast domanda per SKU × cliente. Riordino suggerito prima della rottura.</p></article>
+        <article class="card reveal"><span class="card-num">05</span><h3>Alert Normativo</h3><p>Monitoring giornaliero EUR-Lex, ANAC, TED, Eudamed, AIFA con match automatico sui CND/ATC del catalogo.</p></article>
+      </div>
+      <h3 class="block-title reveal">8 moduli operativi</h3>
+      <div class="mod-grid">
+        <div class="mod reveal"><span class="mod-code">DSH</span><p>Dashboard Direzionale con KPI, criticità, saving catturabile</p></div>
+        <div class="mod reveal"><span class="mod-code">ODA</span><p>Ordini su Accordo Quadro, convenzioni ESTAR, tracciamento consegne</p></div>
+        <div class="mod reveal"><span class="mod-code">FOR</span><p>Fornitori con vendor rating continuo automatico</p></div>
+        <div class="mod reveal"><span class="mod-code">SPA</span><p>Spend Analysis gerarchica CND/ATC a 3 livelli</p></div>
+        <div class="mod reveal"><span class="mod-code">ECO</span><p>Analisi Economica multidimensionale con grafici interattivi</p></div>
+        <div class="mod reveal"><span class="mod-code">BDG</span><p>Budget per CdC, impegnato vs disponibile, blocco automatico</p></div>
+        <div class="mod reveal"><span class="mod-code">TOM</span><p>TOM Med: parco apparecchiature biomediche con TCO 10 anni</p></div>
+        <div class="mod reveal"><span class="mod-code">DOC</span><p>DOT.OCR: lettura offerte, contratti, fatture, DDT con confidence score</p></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ARCHITECTURE / SECURITY -->
+  <section class="section section-alt" id="sicurezza">
+    <div class="container">
+      <div class="split">
+        <div class="reveal">
+          <p class="kicker">Architettura &amp; Sicurezza</p>
+          <h2>Stack 100% open source, zero lock-in</h2>
+          <p class="section-sub" style="margin-left:0">Deploy on-premise, cloud ibrido o air-gap. Nessun dato esce dal perimetro del cliente.</p>
+          <div class="tech-strip" style="justify-content:flex-start;margin-top:24px">
+            <span>NVIDIA AI Blueprints</span><span>Llama 3.1</span><span>Mistral</span><span>MongoDB</span><span>TensorRT-LLM</span><span>Microservizi</span>
+          </div>
+        </div>
+        <div class="sec-box reveal">
+          <h3>Sicurezza &amp; RBAC</h3>
+          <ul class="ticks">
+            <li>7 ruoli RBAC predefiniti (Super Admin, Admin Org., Dirigente Acquisti, Buyer, Farmacista, Controller, Richiedente)</li>
+            <li>JWT a livello BFF, autorizzazione lato server</li>
+            <li>Database separati per ogni cliente</li>
+            <li>Log append-only immutabile (D.lgs 36/2023)</li>
+            <li>Policy predefinita di negazione</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- COMPLIANCE -->
+  <section class="section" id="compliance">
+    <div class="container">
+      <div class="section-head reveal"><p class="kicker">Compliance by design</p><h2>La conformità non è un add-on</h2>
+        <p class="section-sub">L’AI completamente on-premise rende la compliance una proprietà dell’architettura, non una funzione aggiunta dopo.</p></div>
+      <div class="compliance-grid">
+        <div class="comp reveal"><h3>GDPR Art. 9</h3><p>Dati sanitari trattati interamente on-premise: zero data out by design.</p></div>
+        <div class="comp reveal"><h3>D.lgs 36/2023</h3><p>Audit trail completo append-only e tracciabilità di ogni criterio di acquisto.</p></div>
+        <div class="comp reveal"><h3>MDR</h3><p>Classi e documentazione dispositivi sempre associate allo SKU, full enforcement 2026.</p></div>
+        <div class="comp reveal"><h3>NIS2</h3><p>Gestione del rischio cyber dei dispositivi medici e dell’infrastruttura.</p></div>
+        <div class="comp reveal"><h3>ANAC · Corte dei Conti</h3><p>Evidenza pronta dei criteri adottati in ogni decisione di acquisto.</p></div>
+        <div class="comp reveal"><h3>Eudamed · AIFA</h3><p>Monitoraggio normativo giornaliero con match automatico sul catalogo.</p></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ROADMAP -->
+  <section class="section section-alt" id="roadmap">
+    <div class="container">
+      <div class="section-head reveal"><p class="kicker">Roadmap di implementazione</p><h2>Deploy modulare e progressivo</h2></div>
+      <div class="timeline">
+        <div class="phase reveal"><span class="phase-time">Mesi 1-2</span><h3>Fase 1 — Go-live Core</h3><p>Knowledge system + Normalizzazione CND/ATC + Benchmark ANAC/TED/CONSIP + Verifica budget + Dashboard.</p><p class="phase-value">→ Primo risparmio misurabile a 90 giorni</p></div>
+        <div class="phase reveal"><span class="phase-time">Mesi 3-4</span><h3>Fase 2 — Agenti e RFQ</h3><p>RFQ automatizzata (SMTP/IMAP/OCR/LLM) + Monitoraggio contratti con drift score + Agente ODA + Customer rating.</p><p class="phase-value">→ Ciclo offerte automatizzato · zero contratti scaduti</p></div>
+        <div class="phase reveal"><span class="phase-time">Mesi 5-6</span><h3>Fase 3 — AI Avanzata</h3><p>LLM on-premise fine-tuned + Agente Normativa MDR/ANAC/AIFA + Scorte predittive + Agente BI conversazionale.</p><p class="phase-value">→ Compliance proattiva · sistema autonomo H24</p></div>
+      </div>
+    </div>
+  </section>
+
+  <section class="cta-band">
+    <div class="container cta-inner reveal">
+      <h2>Vuoi vedere l’architettura sui tuoi dati?</h2>
+      <p>Ti mostriamo la normalizzazione e gli agenti AI all’opera in una demo live di 60 minuti.</p>
+      <a href="contatti.html" class="btn btn-primary btn-lg" style="background:var(--navy)">Richiedi una demo live</a>
+    </div>
+  </section>
+
+  <div data-layout="footer"></div>
+  <script src="js/layout.js"></script>
+</body>
+</html>
