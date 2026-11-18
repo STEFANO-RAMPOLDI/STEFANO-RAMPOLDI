@@ -5,7 +5,7 @@ from typing import Literal, Optional
 
 from mcp.server.fastmcp import FastMCP
 
-from . import core, piano, pianifica, offerte
+from . import core, piano, pianifica, offerte, budget as bg
 
 mcp = FastMCP(
     "somamed-crm",
@@ -38,7 +38,14 @@ mcp = FastMCP(
         "Quando l'utente crea o rivede un obiettivo, proponi di costruire il piano misurabile con piano_obiettivo: "
         "una domanda alla volta, poi salva_piano_obiettivo con le tue indicazioni. "
         "Per preparare un'offerta economica usa crea_offerta collegandola all'iniziativa, con le righe dei prodotti e una "
-        "premessa breve e personale; ricorda all'utente di rivederla e stamparla dalla sezione Offerte."
+        "premessa breve e personale; ricorda all'utente di rivederla e stamparla dalla sezione Offerte. "
+        "BUDGET STRATEGICO: il valore di un centro nasce dalle voci del prodotto (es. Asimily: dispositivi monitorati × "
+        "€/dispositivo/anno × anni). Prima di un budget controlla le voci con voci_prodotto e, se mancano, chiedile all'utente "
+        "(imposta_voce_prodotto). Quando l'utente dà dati di un centro (posti letto, quante apparecchiature) usa censisci_centro. "
+        "Con crea_budget_strategico valuti i centri di un'area: valore potenziale, margine, probabilità, fascia A/B/C, "
+        "strategia proposta; commentali con budget_strategico (quali centri valgono di più, dove abbiamo accesso, cosa manca). "
+        "Le scelte sui centri (escludere, probabilità, strategia) con scelta_centro_budget; poi genera_piano_tattico crea "
+        "l'iniziativa macro con le attività per centro e per voce. Dichiara sempre quali valori sono stimati."
     ),
 )
 
@@ -533,6 +540,100 @@ def suggerimenti_processo() -> dict:
     """Suggerimenti per migliorare i processi commerciali e di marketing, ricavati dalle attività e dagli esiti,
     più le idee annotate dall'utente."""
     return {"suggerimenti": piano.suggerimenti_processo()}
+
+
+# ---------- budget strategico ----------
+
+Strategia = Literal["attacco", "accesso", "sviluppo", "presidio", "censire"]
+Fonte_q = Literal["dichiarata", "censita", "stimata"]
+
+
+@mcp.tool()
+@safe
+def voci_prodotto(prodotto: str) -> dict:
+    """Voci di prezzo di un prodotto: gli item che generano il valore (es. dispositivi monitorati, € per unità, canone)."""
+    return bg.voci(prodotto)
+
+
+@mcp.tool()
+@safe
+def imposta_voce_prodotto(prodotto: str, nome: str, prezzo_unitario: Optional[float] = None, unita: Optional[str] = None,
+                          costo_unitario: Optional[float] = None, ricorrente: Optional[bool] = None, anni: Optional[int] = None,
+                          stima_per_posto_letto: Optional[float] = None, quantita_fissa: Optional[float] = None,
+                          note: Optional[str] = None) -> dict:
+    """Crea o aggiorna una voce di prezzo. ricorrente=True se è un canone annuo (valore = quantità × prezzo × anni).
+    stima_per_posto_letto: unità tipiche per posto letto, per stimare i centri non ancora censiti.
+    quantita_fissa: quantità uguale per ogni centro (es. 1 installazione)."""
+    return bg.salva_voce(prodotto, nome, None, prezzo_unitario=prezzo_unitario, unita=unita, costo_unitario=costo_unitario,
+                         ricorrente=ricorrente, anni=anni, stima_per_posto_letto=stima_per_posto_letto,
+                         quantita_fissa=quantita_fissa, note=note)
+
+
+@mcp.tool()
+@safe
+def censisci_centro(centro: str, posti_letto: Optional[int] = None, prodotto: Optional[str] = None,
+                    quantita: Optional[dict] = None, fonte: Fonte_q = "dichiarata") -> dict:
+    """Dati dell'organizzazione di un centro: posti letto e quante unità ha di ogni voce del prodotto.
+    quantita: {nome della voce: numero}, es. {"Dispositivi medicali connessi": 1800}."""
+    out = {}
+    if posti_letto is not None:
+        out["posti_letto"] = bg.imposta_posti_letto(centro, posti_letto)
+    if quantita:
+        if not prodotto:
+            raise core.CRMError("Indica il prodotto a cui appartengono le voci.")
+        vv = {v["nome"].lower(): v for v in bg.voci(prodotto)["voci"]}
+        out["voci"] = []
+        for nome, q in quantita.items():
+            v = vv.get(str(nome).lower()) or next((x for k, x in vv.items() if str(nome).lower() in k), None)
+            if not v:
+                raise core.CRMError(f"Voce '{nome}' non trovata. Voci del prodotto: " + ", ".join(x["nome"] for x in vv.values()))
+            out["voci"].append(bg.censisci(centro, v["id"], q, fonte))
+    return out
+
+
+@mcp.tool()
+@safe
+def crea_budget_strategico(titolo: str, prodotto: str, regioni: Optional[str] = None, province: Optional[str] = None,
+                           tipi_centro: Optional[list[str]] = None, obiettivo: Optional[str] = None,
+                           anno: Optional[int] = None, sconto_medio: float = 0) -> dict:
+    """Budget strategico di un prodotto su un'area: valuta tutti i centri (valore potenziale dalle voci, margine,
+    probabilità, valore atteso, fascia A/B/C, strategia proposta). Se c'è l'obiettivo ne eredita l'area."""
+    return _sintesi_budget(bg.crea_budget(titolo, prodotto, obiettivo, anno, regioni, province, tipi_centro, sconto_medio))
+
+
+def _sintesi_budget(d, max_centri=40):
+    tieni = ("azienda_id", "centro", "provincia", "natura", "fascia", "valore_potenziale", "margine_potenziale",
+             "affidabilita", "probabilita", "valore_atteso", "strategia_nome", "gara", "stato", "venduto", "incluso")
+    return {"budget": d["budget"], "riepilogo": d["riepilogo"],
+            "centri": [{**{k: c[k] for k in tieni},
+                        "voci": [f"{v['quantita']} {v['voce']} ({v['fonte']})" for v in c["voci"]]} for c in d["centri"][:max_centri]],
+            "altri_centri": max(0, len(d["centri"]) - max_centri), "strategie": d["strategie"]}
+
+
+@mcp.tool()
+@safe
+def budget_strategico(budget_id: Optional[int] = None) -> dict:
+    """Senza id: elenco dei budget con potenziale, atteso e venduto. Con id: centri ordinati per fascia e valore,
+    voci per centro (censite o stimate), strategia, stato (da avviare, in corso, vinto, perso) e avvisi."""
+    return {"budget": bg.elenco_budget()} if budget_id is None else _sintesi_budget(bg.budget(budget_id))
+
+
+@mcp.tool()
+@safe
+def scelta_centro_budget(budget_id: int, centro: str, incluso: Optional[bool] = None, probabilita: Optional[int] = None,
+                         strategia: Optional[Strategia] = None, note: Optional[str] = None) -> dict:
+    """Scelte su un centro del budget: escluderlo, cambiare probabilità o strategia (attacco diretto, costruire
+    l'accesso, sviluppo mirato, presidio marketing, censire prima)."""
+    return bg.imposta_centro(budget_id, centro, incluso, probabilita, strategia, note)
+
+
+@mcp.tool()
+@safe
+def genera_piano_tattico(budget_id: int, fasce: str = "A,B", data_inizio: Optional[str] = None,
+                         responsabile: str = "Stefano", centri_a_settimana: int = 3) -> dict:
+    """Dal budget al piano: crea l'iniziativa macro e, per ogni centro delle fasce scelte, le attività della sua
+    strategia (con un'operazione per ogni voce del prodotto), scaglionate per fascia e per settimana."""
+    return bg.genera_piano_tattico(budget_id, fasce, data_inizio, responsabile, centri_a_settimana)
 
 
 def main():

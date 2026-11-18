@@ -9,9 +9,9 @@ Claude li scrive nel database; tu li vedi e li modifichi dall'interfaccia web.
 somamed/
 ├── database/      ← DATI: PostgreSQL 16 + pgvector (Docker). L'unico posto dove stanno i dati.
 │   ├── docker-compose.yml
-│   └── migrazioni/   001…014 *.sql — la struttura del database, applicata da sola
+│   └── migrazioni/   001…015 *.sql — la struttura del database, applicata da sola
 ├── servizio/      ← SERVIZIO DATI: l'unica porta d'accesso ai dati (API web + ponte con Claude)
-│   ├── crm/          web.py (API, porta 8080) · server.py (Claude/MCP) · core.py (logica)
+│   ├── crm/          web.py (API, porta 8080) · server.py (Claude/MCP) · core.py (logica) · budget.py
 │   └── tests/
 ├── interfaccia/   ← INTERFACCIA: solo la pagina web (porta 8081), nessun dato
 │   ├── index.html · mappa.json
@@ -79,6 +79,33 @@ Misurato su un database di prova con 3.000 centri, 8.000 persone, 2.000 iniziati
 - **Avvio robusto**: il servizio parte anche se il database non è ancora acceso e si aggiorna appena risponde; su un database nuovo crea da sé le estensioni.
 - **Ricerca per significato**: modello caricato una volta sola e in anticipo, domande ripetute dalla cache, calcolo a blocchi per le importazioni; con pgvector 0.8 le ricerche filtrate (per centro, regione…) restituiscono sempre abbastanza risultati.
 - **Interfaccia**: compressione delle risposte, letture ritentate da sole se il servizio è momentaneamente irraggiungibile.
+
+## Budget strategico: quanto vale ogni centro e come aggredirlo
+
+OPERATIONAL → **Budget strategico**. Prima di partire sai quali centri valgono di più, perché, e con quale strategia attaccarli.
+
+1. **Voci di prezzo del prodotto** — gli item che generano il valore. Esempio Asimily:
+   «Dispositivi medicali connessi», 40 €/dispositivo, canone per 3 anni, stima 2,5 dispositivi per posto letto;
+   «Installazione», 8.000 € a sito, quantità fissa 1. (Valori di esempio: metti i tuoi prezzi e costi reali.)
+2. **Organizzazione del centro** — posti letto e quante unità ha di ogni voce (scritte nella cella della tabella:
+   dichiarate dal centro o censite). Dove non ci sono, il CRM stima dai posti letto o, in mancanza, dalla dimensione
+   (piccolo 80, medio 250, grande 600 posti: stima grossolana, segnata in corsivo grigio). La colonna **Dati certi**
+   dice quanta parte del valore poggia su dati veri.
+3. **Valore di ogni centro** = Σ quantità × prezzo × anni (per i canoni) − sconto medio, e il **margine** dai costi.
+4. **Fasce A/B/C** (Pareto): A = i centri che fanno il 70% del valore, B = il successivo 20%, C = il resto.
+5. **Probabilità** proposta (base 20%, + persone conosciute, + relazione, + già cliente, − pubblico/gara, 5% se ha già
+   rifiutato) e **valore atteso** = valore × probabilità. Puoi cambiarla centro per centro.
+6. **Strategia** dalla matrice valore × accesso: *Attacco diretto* (alto valore, abbiamo accesso), *Costruire l'accesso*
+   (alto valore, non conosciamo nessuno), *Sviluppo mirato* (valore medio), *Presidio marketing* (valore basso),
+   *Censire prima* (mancano i dati). Nei centri pubblici si aggiunge il **percorso di gara**.
+7. **Piano tattico** — un clic crea l'**iniziativa macro** del budget e, per ogni centro delle fasce scelte, la sequenza
+   di attività della sua strategia, con **un'operazione per ogni voce** (verificare quantità e situazione degli
+   strumenti), scaglionate (A subito, B dopo 2 settimane, C dopo 4; N centri a settimana). Rilanciarlo non duplica.
+8. **Verifica** — per ogni centro: da avviare, in corso, vinto (dalle iniziative vinte, dagli esiti o dalle offerte
+   accettate), perso; in alto venduto, in offerta e quanto resta da trovare rispetto al budget atteso.
+
+A Claude: «crea il budget Asimily per la Lombardia», «lo Spedali Civili ha 1.500 posti letto e 2.600 dispositivi
+connessi», «quali sono i 5 centri che valgono di più e dove non abbiamo accesso?», «genera il piano tattico per la fascia A».
 
 ## Obiettivi e sotto-obiettivi
 
@@ -164,3 +191,7 @@ si spostano trascinando, e hanno i pulsanti ＋ / － / ⤢.
 | persone_da_contattare / grafo_obiettivi | chi contattare e perché; situazione a grafo |
 | imposta_allerta / elenco_allerte / aggiorna_allerta | solleciti, riattivazioni, promemoria |
 | da_riattivare / storico_contatto | chi è fermo da tempo; tutte le volte che una persona è stata contattata |
+| voci_prodotto / imposta_voce_prodotto | gli item che generano il valore di un prodotto (prezzo, costo, canone, stima per posto letto) |
+| censisci_centro | posti letto e quantità delle voci in un centro |
+| crea_budget_strategico / budget_strategico | valore, margine, probabilità, fascia e strategia di ogni centro di un'area |
+| scelta_centro_budget / genera_piano_tattico | scelte sul singolo centro; dal budget all'iniziativa macro con le attività |

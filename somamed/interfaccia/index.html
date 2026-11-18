@@ -740,7 +740,7 @@ const DIMS = [
   ["centro","Centro","▦"],["regione","Regione","◎"],["provincia","Provincia","◌"],["natura","Pubblico / privato","◐"],
   ["dimensione","Dimensione centro","▥"],["professionalita","Professionalità","◉"],
   ["bu","Business unit","▤"],["prodotto","Prodotto","◆"],["standard","Attività standard","≡"],["contatto","Persona","●"]];
-const NAV_OP = [["oggi","Piano del giorno","☀"],["calendario","Calendario e carico","▦"],["obiettivi","Obiettivi · area e budget","◎"],["offerte","Offerte economiche","€"],["iniziative","<span>Iniziative<span class=\"navsub\">marketing · commerciale</span></span>","⚑"],
+const NAV_OP = [["oggi","Piano del giorno","☀"],["calendario","Calendario e carico","▦"],["obiettivi","Obiettivi · area e budget","◎"],["budget","<span>Budget strategico<span class=\"navsub\">valore dei centri · piano tattico</span></span>","▤"],["offerte","Offerte economiche","€"],["iniziative","<span>Iniziative<span class=\"navsub\">marketing · commerciale</span></span>","⚑"],
   ["diario","Diario e agenda","✎"],["dacontattare","Persone da contattare","☎"],["allerte","Allerte","⏰"]];
 const NAV_DATI = [["contatti","Contatti","●"],["centri","Centri e mappa","⌖"],["prodotti","Prodotti","◆"]];
 const NAV_STR = [["importa","Importa da CSV","⇪"],["utenti","Utenti","◍"],["dati","Dati e collegamento","⛁"]];
@@ -2717,6 +2717,158 @@ function infoSlot(id){
 }
 async function spostaDa(id){ const v = $("#calQ").value; if(!v) return; try{ await post(`/api/attivita/${id}/sposta`, {quando:v.replace("T"," ")}); toast("Spostata"); render(); }catch(e){ toast(e.message); } }
 
+/* ---------- BUDGET STRATEGICO: valore dei centri dalle voci del prodotto → strategia → piano tattico ---------- */
+const FONTE_Q = {censita:"censita", dichiarata:"dichiarata", fissa:"fissa", mancante:"manca il dato"};
+const COL_FASCIA = {A:"var(--green)", B:"var(--blue)", C:"var(--tx3)", "—":"var(--gold)"};
+const COL_STATO = {"vinto":"var(--green)", "perso":"var(--red)", "in corso":"var(--blue)", "da avviare":"var(--tx3)"};
+const nf = v => v==null ? "" : Number(v).toLocaleString("it-IT",{maximumFractionDigits:1});
+const fasciaB = f => `<span class="badge" style="border-color:${COL_FASCIA[f]};color:${COL_FASCIA[f]};padding:2px 7px">${f}</span>`;
+let BUD = null;
+
+async function vistaBudgetElenco(){
+  sidebar(); $("#crumb").textContent = "OPERATIONAL / BUDGET STRATEGICO";
+  const arr = await api("/api/budget");
+  const ob = (META.obiettivi||[]), pr = (META.prodotti||[]);
+  $("#main").innerHTML = `
+  <div class="panel"><div class="ph">Budget strategici<span class="n">${arr.length} · valore dei centri calcolato dalle voci del prodotto</span></div>
+    ${arr.length ? `<table class="tab"><thead><tr><th>Budget</th><th>Prodotto</th><th>Anno</th><th>Centri</th><th>Fascia A</th>
+      <th>Potenziale</th><th>Atteso</th><th>Venduto</th><th>In offerta</th><th>Stato centri</th><th>Stato</th></tr></thead><tbody>
+      ${arr.map(b=>`<tr style="cursor:pointer" onclick="location.hash='/budget/${b.id}'"><td><a href="#/budget/${b.id}">${esc(b.titolo)}</a></td>
+        <td>${L("prodotto",b.prodotto_id,b.prodotto)}</td><td class="mono">${b.anno||""}</td><td class="mono">${b.inclusi}</td><td class="mono">${b.fascia_A}</td>
+        <td class="mono">${eur(b.valore_potenziale)}</td><td class="mono">${eur(b.valore_atteso)}</td><td class="mono" style="color:var(--green)">${eur(b.venduto)}</td>
+        <td class="mono">${eur(b.in_offerta)}</td>
+        <td style="font-size:11px">${Object.entries(b.stati).filter(([k,v])=>v).map(([k,v])=>`<span style="color:${COL_STATO[k]}">${v} ${k}</span>`).join(" · ")}</td>
+        <td><span class="gen">${esc(b.stato)}</span></td></tr>`).join("")}</tbody></table>`
+      : `<div class="empty">Nessun budget. Creane uno qui sotto: scegli il prodotto e l'area, il CRM valuta tutti i centri.</div>`}
+  </div>
+  <div class="panel" style="margin-top:14px"><div class="ph">Nuovo budget strategico</div>
+    <div style="padding:10px 12px;display:flex;gap:8px;flex-wrap:wrap;align-items:center">
+      <input class="f" id="bgT" placeholder="Titolo (es. Asimily Lombardia 2027)" style="flex:2;min-width:240px">
+      <select class="f" id="bgP" style="width:220px"><option value="">— prodotto —</option>${pr.map(p=>`<option value="${p.id}">${esc(p.nome)}</option>`).join("")}</select>
+      <select class="f" id="bgO" style="width:220px"><option value="">— obiettivo (facoltativo) —</option>${ob.map(o=>`<option value="${o.id}">${esc(o.titolo)}</option>`).join("")}</select>
+      <input class="f" id="bgA" type="number" placeholder="Anno" value="${new Date().getFullYear()+1}" style="width:90px">
+      <input class="f" id="bgR" placeholder="Regioni (es. Lombardia, Veneto)" style="flex:1;min-width:200px">
+      <input class="f" id="bgV" placeholder="Province (es. MI, BG)" style="width:160px">
+      <input class="f" id="bgS" type="number" min="0" max="90" placeholder="Sconto medio %" style="width:130px">
+      <button class="ghost" onclick="nuovoBudget()">＋ Crea e valuta i centri</button>
+    </div>
+    <div class="dim" style="padding:0 12px 12px;font-size:12px">Senza regioni né province vale l'area dell'obiettivo (se c'è) oppure tutta Italia.
+      I centri considerati sono quelli delle tipologie di clienti del prodotto (DATI → Prodotti); distributori, partner e fornitori sono esclusi.</div>
+  </div>`;
+}
+async function nuovoBudget(){
+  const t=$("#bgT").value.trim(), p=Number($("#bgP").value); if(!t) return toast("Scrivi il titolo"); if(!p) return toast("Scegli il prodotto");
+  try{ const r = await post("/api/budget",{titolo:t, prodotto_id:p, obiettivo_id:Number($("#bgO").value)||null, anno:Number($("#bgA").value)||null,
+        regioni:$("#bgR").value||null, province:$("#bgV").value||null, sconto_medio:Number($("#bgS").value)||0});
+       location.hash = "/budget/"+r.budget.id; }catch(e){ toast(e.message); }
+}
+
+async function vistaBudget(id){
+  sidebar(); $("#crumb").textContent = "OPERATIONAL / BUDGET STRATEGICO";
+  const d = BUD = await api("/api/budget/"+id), b = d.budget, r = d.riepilogo, V = d.voci;
+  const ck = (cl, l, v, s) => `<div class="ck ${cl}" style="cursor:default"><div class="l">${l}</div><div class="v">${v}</div><div class="s">${s}</div></div>`;
+  const maxF = Math.max(1, ...["A","B","C","—"].map(f=>r.fasce[f].valore_potenziale));
+  const m = r.matrice;
+  const cella = (k, tit, sub, col) => `<div style="background:var(--bg2);padding:12px;border-top:2px solid ${col}"><div style="font-size:10px;letter-spacing:.14em;color:var(--tx3)">${tit}</div>
+      <div class="mono" style="font-size:24px">${m[k]}</div><div class="dim" style="font-size:11px">${sub}</div></div>`;
+  const strat = Object.entries(d.strategie);
+  const area = [...(b.regioni||[]), ...(b.province||[])].join(", ") || "tutta Italia";
+  $("#main").innerHTML = `
+  <div class="panel"><div class="ph">${esc(b.titolo)}<span class="n">${L("prodotto",b.prodotto_id,b.prodotto)} · ${esc(area)} · ${b.anno||""}
+      ${b.obiettivo_id?` · obiettivo ${L("obiettivo",b.obiettivo_id,b.obiettivo)}`:""}${b.iniziativa_id?` · piano tattico ${L("trattativa",b.iniziativa_id,b.iniziativa)}`:""}</span>
+      <span style="margin-left:auto;font-size:12px" class="dim">sconto medio <input class="f" type="number" min="0" max="90" value="${b.sconto_medio||0}" style="width:64px;display:inline-block;padding:3px 6px" onchange="modBudget({sconto_medio:Number(this.value)||0})"> %</span></div>
+    ${r.avvisi.length?`<div style="padding:8px 12px;border-bottom:1px solid var(--line)">${r.avvisi.map(a=>`<div style="color:var(--gold);font-size:12.5px">⚠ ${esc(a)}</div>`).join("")}</div>`:""}
+  </div>
+  <div class="cmd-kpi" style="margin-top:14px">
+    ${ck("blu","Valore potenziale",eur(r.valore_potenziale),`${r.inclusi} centri nel budget`)}
+    ${ck("","Margine potenziale",eur(r.margine_potenziale),r.valore_potenziale?Math.round(r.margine_potenziale/r.valore_potenziale*100)+"% del potenziale":"")}
+    ${ck("blu","Budget atteso",eur(r.valore_atteso),"potenziale × probabilità")}
+    ${ck("verde","Venduto",eur(r.venduto),`${r.stati.vinto} centri vinti`)}
+    ${ck("","In offerta",eur(r.in_offerta),`${r.stati["in corso"]} centri in corso`)}
+    ${ck(r.da_trovare?"ambra":"","Da trovare",eur(r.da_trovare),"atteso non ancora venduto")}
+  </div>
+  <div class="cols3">
+    <div class="panel"><div class="ph">Dove sta il valore<span class="n">fasce A/B/C sul potenziale (Pareto 70/90%)</span></div><div style="padding:10px 14px">
+      ${["A","B","C","—"].map(f=>{ const x=r.fasce[f]; return `<div style="margin-bottom:10px"><div style="display:flex;gap:10px;align-items:center">${fasciaB(f)}
+        <span>${x.centri} centri</span><span class="mono" style="margin-left:auto">${eur(x.valore_potenziale)}</span><span class="dim mono" style="width:120px;text-align:right">atteso ${eur(x.valore_atteso)}</span></div>
+        <div class="bar"><i style="width:${x.valore_potenziale/maxF*100}%;background:${COL_FASCIA[f]}"></i></div></div>`; }).join("")}
+      <div class="dim" style="font-size:11.5px">A = i centri che fanno il 70% del valore · B = il successivo 20% · C = il resto · — = mancano i dati per stimarli</div></div></div>
+    <div class="panel"><div class="ph">Valore × accesso<span class="n">da qui nasce la strategia</span></div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:1px;background:var(--line);margin:10px 14px">
+        ${cella("alto_accessibile","ALTO VALORE · ACCESSO","attacco diretto","var(--green)")}${cella("alto_da_aprire","ALTO VALORE · DA APRIRE","costruire l'accesso","var(--gold)")}
+        ${cella("basso_accessibile","BASSO VALORE · ACCESSO","sviluppo / cross-selling","var(--blue)")}${cella("basso_da_aprire","BASSO VALORE · DA APRIRE","presidio marketing","var(--tx3)")}
+      </div><div class="dim" style="font-size:11.5px;padding:0 14px 12px">Accesso = persone conosciute, relazione forte/media o già cliente. Nei centri pubblici si aggiunge il percorso di gara.</div></div>
+  </div>
+  <div class="panel" style="margin-top:14px"><div class="ph">Voci di prezzo di ${esc(b.prodotto)}<span class="n">gli item che generano il valore: valore centro = Σ quantità × prezzo × anni (canoni) − sconto</span></div>
+    <div style="overflow:auto"><table class="tab"><thead><tr><th>Voce</th><th style="width:110px">Unità</th><th style="width:110px">Prezzo €/unità</th><th style="width:100px">Costo €/unità</th>
+      <th style="width:80px">Canone</th><th style="width:70px">Anni</th><th style="width:120px">Stima per posto letto</th><th style="width:110px">Quantità fissa</th><th style="width:120px"></th></tr></thead><tbody>
+      ${[...V, {id:0, nome:"", unita:"pz", prezzo_unitario:"", costo_unitario:"", ricorrente:false, anni:1}].map(v=>`<tr id="voce${v.id}">
+        <td><input class="f" data-k="nome" value="${esc(v.nome||"")}" placeholder="${v.id?"":"Nuova voce (es. dispositivi medicali connessi)"}"></td>
+        <td><input class="f" data-k="unita" value="${esc(v.unita||"")}"></td>
+        <td><input class="f mono" data-k="prezzo_unitario" value="${v.prezzo_unitario??""}"></td>
+        <td><input class="f mono" data-k="costo_unitario" value="${v.costo_unitario??""}"></td>
+        <td style="text-align:center"><input type="checkbox" data-k="ricorrente" ${v.ricorrente?"checked":""}></td>
+        <td><input class="f mono" data-k="anni" value="${v.anni??1}"></td>
+        <td><input class="f mono" data-k="stima_per_posto_letto" value="${v.stima_per_posto_letto??""}" placeholder="es. 2,5"></td>
+        <td><input class="f mono" data-k="quantita_fissa" value="${v.quantita_fissa??""}" placeholder="es. 1"></td>
+        <td><button class="ghost" style="font-size:11px;padding:3px 9px" onclick="salvaVoce(${v.id})">${v.id?"Salva":"＋ Aggiungi"}</button>
+          ${v.id?`<button class="ghost" style="font-size:11px;padding:3px 7px" title="Elimina" onclick="eliminaVoce(${v.id})">✕</button>`:""}</td></tr>`).join("")}
+    </tbody></table></div></div>
+  <div class="panel" style="margin-top:14px"><div class="ph">Centri del budget<span class="n">${d.centri.length} · ordinati per fascia e valore atteso · le quantità si scrivono nella cella (vuota = stima)</span></div>
+    <div style="overflow:auto"><table class="tab"><thead><tr><th style="width:34px" title="Nel budget">✓</th><th style="width:44px">Fascia</th><th>Centro</th><th style="width:44px">Prov.</th>
+      <th style="width:70px">Natura</th><th style="width:80px">Posti letto</th>${V.map(v=>`<th style="width:118px">${esc(v.nome)}</th>`).join("")}
+      <th style="width:105px">Potenziale</th><th style="width:95px">Margine</th><th style="width:55px" title="Quota del valore basata su dati censiti/dichiarati">Dati certi</th>
+      <th style="width:70px">Prob. %</th><th style="width:100px">Atteso</th><th style="width:160px">Strategia</th><th style="width:85px">Stato</th></tr></thead><tbody>
+      ${d.centri.map(c=>`<tr style="${c.incluso?"":"opacity:.45"}">
+        <td><input type="checkbox" ${c.incluso?"checked":""} onchange="sceltaCentro(${c.azienda_id},{incluso:this.checked})"></td>
+        <td>${fasciaB(c.fascia)}</td>
+        <td>${L("azienda",c.azienda_id,c.centro)}<div class="dim" style="font-size:11px">${esc(c.tipo||"")}${c.n_conosciuti?` · <span style="color:var(--green)">★ ${c.n_conosciuti} conosciuti</span>`:""}${c.gia_cliente?" · già cliente":""}${c.relazione?` · relazione ${esc(c.relazione)}`:""}</div></td>
+        <td class="mono">${esc(c.provincia||"")}</td><td style="font-size:12px">${esc(c.natura||"—")}</td>
+        <td><input class="f mono" style="padding:3px 5px" value="${c.posti_letto??""}" placeholder="${c.dimensione?esc(c.dimensione):"?"}" onchange="postiLetto(${c.azienda_id}, this.value)"></td>
+        ${c.voci.map(v=>{ const certo = ["censita","dichiarata","fissa"].includes(v.fonte);
+          return `<td title="${esc(FONTE_Q[v.fonte]||v.fonte)} · ${eur(v.valore)}"><input class="f mono" style="padding:3px 5px;${certo?"":"color:var(--tx3);font-style:italic"}"
+            value="${["censita","dichiarata"].includes(v.fonte)?nf(v.quantita):""}" placeholder="${v.quantita!=null?"~"+nf(v.quantita):"?"}"
+            onchange="censisci(${c.azienda_id},${v.voce_id},this.value)"><div class="dim" style="font-size:10px">${esc(FONTE_Q[v.fonte]||v.fonte)}</div></td>`; }).join("")}
+        <td class="mono">${eur(c.valore_potenziale)}</td><td class="mono dim">${eur(c.margine_potenziale)}</td>
+        <td class="mono" style="color:${c.affidabilita>=50?"var(--green)":"var(--gold)"}">${c.affidabilita}%</td>
+        <td><input class="f mono" style="padding:3px 5px" value="${c.probabilita}" title="${esc(c.perche_probabilita.join(" · "))}" onchange="sceltaCentro(${c.azienda_id},{probabilita:this.value})"></td>
+        <td class="mono">${eur(c.valore_atteso)}</td>
+        <td><select class="f" style="padding:3px 4px;font-size:12px" onchange="sceltaCentro(${c.azienda_id},{strategia:this.value})" title="${esc(d.strategie[c.strategia].quando)}">
+          ${strat.map(([k,s])=>`<option value="${k}" ${k===c.strategia?"selected":""}>${esc(s.nome)}${k===c.strategia_proposta?" (proposta)":""}</option>`).join("")}</select>
+          ${c.gara?`<div style="font-size:10px;color:var(--gold)">+ percorso di gara</div>`:""}</td>
+        <td><span style="color:${COL_STATO[c.stato]};font-size:12px">● ${esc(c.stato)}</span>${c.venduto?`<div class="mono" style="font-size:11px;color:var(--green)">${eur(c.venduto)}</div>`:""}${c.pianificato?`<div class="dim" style="font-size:10px">pianificato</div>`:""}</td>
+      </tr>`).join("")}
+    </tbody></table></div></div>
+  <div class="panel" style="margin-top:14px"><div class="ph">Piano tattico<span class="n">${b.iniziativa_id?`iniziativa macro: ${L("trattativa",b.iniziativa_id,b.iniziativa)}`:"crea l'iniziativa macro e le attività per centro e per voce"}</span></div>
+    <div style="padding:10px 12px;display:flex;gap:10px;flex-wrap:wrap;align-items:center">
+      <span class="dim">Fasce</span>${["A","B","C","—"].map(f=>`<label class="toggle" style="border:1px solid var(--line2);padding:3px 9px"><input type="checkbox" class="tfas" value="${f}" ${f==="A"||f==="B"?"checked":""}> ${f} (${r.fasce[f].centri})</label>`).join("")}
+      <span class="dim">dal</span><input class="f" type="date" id="tDal" style="width:150px" value="${new Date(Date.now()+864e5).toISOString().slice(0,10)}">
+      <span class="dim">centri a settimana</span><input class="f" type="number" id="tSet" min="1" value="3" style="width:70px">
+      <button class="ghost" onclick="pianoTattico()">⚑ Genera piano tattico</button>
+    </div>
+    <div class="dim" style="padding:0 12px 12px;font-size:12px">Per ogni centro: la sequenza della sua strategia (${strat.map(([k,s])=>esc(s.nome)).join(" · ")}), con un'operazione per ogni voce
+      (verificare quantità e situazione degli strumenti). Le fasce partono scaglionate (A subito, B dopo 2 settimane, C dopo 4). I centri già pianificati non vengono duplicati.</div>
+  </div>`;
+}
+const bid = () => BUD.budget.id;
+async function modBudget(campi){ try{ await post(`/api/budget/${bid()}`, campi); render(); }catch(e){ toast(e.message); } }
+async function sceltaCentro(aid, campi){ try{ await post(`/api/budget/${bid()}/centro/${aid}`, campi); toast("Salvato"); render(); }catch(e){ toast(e.message); } }
+async function censisci(aid, vid, q){ try{ await post(`/api/centro/${aid}/voce/${vid}`, {quantita:String(q).trim().replace(/\./g,"").replace(",","."), fonte:"dichiarata"});
+  toast(String(q).trim()?"Quantità salvata":"Tolta: torna la stima"); render(); }catch(e){ toast(e.message); } }
+async function postiLetto(aid, v){ try{ await post(`/api/centro/${aid}/posti_letto`, {posti_letto:String(v).trim()}); toast("Posti letto salvati"); render(); }catch(e){ toast(e.message); } }
+async function salvaVoce(vid){
+  const tr = $("#voce"+vid), d = {}; tr.querySelectorAll("[data-k]").forEach(el => d[el.dataset.k] = el.type==="checkbox" ? el.checked : el.value.trim().replace(",","."));
+  if(!d.nome) return toast("Scrivi il nome della voce"); if(vid) d.id = vid;
+  try{ await post(`/api/prodotto/${BUD.budget.prodotto_id}/voci`, d); toast("Voce salvata: valori ricalcolati"); render(); }catch(e){ toast(e.message); }
+}
+async function eliminaVoce(vid){ if(!confirm("Eliminare la voce? Si perdono anche le quantità censite nei centri.")) return;
+  try{ await post(`/api/voce/${vid}/elimina`, {}); render(); }catch(e){ toast(e.message); } }
+async function pianoTattico(){
+  const fasce = [...document.querySelectorAll(".tfas:checked")].map(x=>x.value); if(!fasce.length) return toast("Scegli almeno una fascia");
+  try{ const r = await post(`/api/budget/${bid()}/tattico`, {fasce, data_inizio:$("#tDal").value||null, responsabile:UTENTE(), centri_a_settimana:Number($("#tSet").value)||3});
+       toast(`Piano creato: ${r.centri_pianificati} centri, ${r.attivita_create} attività`); META = await api("/api/meta"); render(); }catch(e){ toast(e.message); }
+}
+
 async function render(){
   const {parts,q} = parseHash();
   try{
@@ -2741,6 +2893,7 @@ async function render(){
     else if(parts[0]==="diario") await vistaDiario(q);
     else if(parts[0]==="note") await vistaNote(q);
     else if(parts[0]==="importa") await vistaImporta();
+    else if(parts[0]==="budget") { if(parts[1]) await vistaBudget(Number(parts[1])); else await vistaBudgetElenco(); }
     else if(parts[0]==="offerte") await vistaOfferte(q);
     else if(parts[0]==="offerta") await vistaOfferta(Number(parts[1]), q);
     else if(parts[0]==="utenti") await vistaUtenti();

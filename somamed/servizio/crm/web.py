@@ -22,7 +22,7 @@ from fastapi.middleware.cors import CORSMiddleware
 from fastapi.middleware.gzip import GZipMiddleware
 from pydantic import BaseModel
 
-from . import config, core, piano, dati, pianifica, offerte
+from . import config, core, piano, dati, pianifica, offerte, budget as bg
 from .embed import precarica
 
 logging.basicConfig(level=logging.INFO, format="%(asctime)s %(levelname)s %(name)s: %(message)s")
@@ -1061,6 +1061,102 @@ def api_mappa(tipo: Optional[str] = None, id: Optional[int] = None):
         return core.mappa_mentale(tipo or None, id)
     except core.CRMError as e:
         raise HTTPException(400, str(e))
+
+
+# ---------- budget strategico e piano tattico ----------
+
+@app.get("/api/budget")
+def api_elenco_budget():
+    return bg.elenco_budget()
+
+
+class NuovoBudget(BaseModel):
+    titolo: str
+    prodotto_id: int
+    obiettivo_id: Optional[int] = None
+    anno: Optional[int] = None
+    regioni: Optional[str] = None
+    province: Optional[str] = None
+    tipi: Optional[list[str]] = None
+    sconto_medio: float = 0
+    note: Optional[str] = None
+
+
+@app.post("/api/budget")
+def api_nuovo_budget(n: NuovoBudget):
+    return bg.crea_budget(n.titolo, str(n.prodotto_id), str(n.obiettivo_id) if n.obiettivo_id else None, n.anno,
+                          n.regioni, n.province, n.tipi, n.sconto_medio, n.note)
+
+
+@app.get("/api/budget/{bid}")
+def api_budget(bid: int):
+    return bg.budget(bid)
+
+
+@app.post("/api/budget/{bid}")
+async def api_modifica_budget(bid: int, request: Request):
+    return await run_in_threadpool(lambda d: bg.modifica_budget(bid, **d), await request.json())
+
+
+class CentroBudget(BaseModel):
+    incluso: Optional[bool] = None
+    probabilita: Optional[str] = None
+    strategia: Optional[str] = None
+    note: Optional[str] = None
+
+
+@app.post("/api/budget/{bid}/centro/{aid}")
+def api_centro_budget(bid: int, aid: int, c: CentroBudget):
+    return bg.imposta_centro(bid, aid, c.incluso, c.probabilita, c.strategia, c.note)
+
+
+class Tattico(BaseModel):
+    fasce: list[str] = ["A", "B"]
+    data_inizio: Optional[str] = None
+    responsabile: str = "Stefano"
+    centri_a_settimana: int = 3
+
+
+@app.post("/api/budget/{bid}/tattico")
+def api_tattico(bid: int, t: Tattico):
+    return bg.genera_piano_tattico(bid, t.fasce, t.data_inizio or None, t.responsabile, t.centri_a_settimana)
+
+
+@app.get("/api/prodotto/{pid}/voci")
+def api_voci(pid: int):
+    return bg.voci(str(pid))
+
+
+@app.post("/api/prodotto/{pid}/voci")
+async def api_salva_voce(pid: int, request: Request):
+    d = await request.json()
+    vid = d.pop("id", None)
+    return await run_in_threadpool(lambda: bg.salva_voce(str(pid), d.pop("nome", None), vid, **d))
+
+
+@app.post("/api/voce/{vid}/elimina")
+def api_elimina_voce(vid: int):
+    return bg.elimina_voce(vid)
+
+
+class Censimento(BaseModel):
+    quantita: Optional[str] = None
+    fonte: str = "dichiarata"
+    note: Optional[str] = None
+
+
+@app.post("/api/centro/{aid}/voce/{vid}")
+def api_censisci(aid: int, vid: int, c: Censimento):
+    return bg.censisci(aid, vid, c.quantita, c.fonte, c.note)
+
+
+class PostiLetto(BaseModel):
+    posti_letto: Optional[str] = None
+
+
+@app.post("/api/centro/{aid}/posti_letto")
+def api_posti_letto(aid: int, p: PostiLetto):
+    return bg.imposta_posti_letto(aid, p.posti_letto)
 
 
 def main():

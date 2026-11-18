@@ -87,7 +87,20 @@ L'architettura attuale è già pronta per i passi seguenti; ognuno è indipenden
 6. **Aggiornamenti in tempo reale** (facoltativo): notifiche `LISTEN/NOTIFY` di PostgreSQL → WebSocket, così le
    schermate di più utenti si aggiornano da sole.
 
-## 5. Collaudi
+## 5. Budget strategico (migrazione 015, `servizio/crm/budget.py`)
+
+```
+prodotti ──< prodotti_voci (prezzo, costo, canone/anni, stima per posto letto, quantità fissa)
+aziende (+ posti_letto) ──< centri_voci (quantità per voce, fonte: censita / dichiarata / stimata)
+budget (prodotto, area, anno, sconto) ──< budget_centri (solo le scelte: incluso, probabilità, strategia, pianificato)
+budget.iniziativa_id ──> trattative (iniziativa macro) ──< attivita (+ voce_id: operazione su uno strumento)
+```
+
+Valori, fasce, probabilità e strategie **non sono salvati**: si ricalcolano a ogni lettura dai dati correnti, così un
+nuovo censimento o un nuovo prezzo aggiornano subito il budget; in tabella restano solo le decisioni dell'utente.
+Il venduto si legge da iniziative vinte, esiti «vendita» e offerte accettate (righe del prodotto).
+
+## 6. Collaudi
 
 ```bash
 # su un database di PROVA (i collaudi si rifiutano di girare su somamed_crm)
