@@ -1,0 +1,6 @@
+config.env
+servizio/.venv/
+registro/
+backup/
+__pycache__/
+*.pyc

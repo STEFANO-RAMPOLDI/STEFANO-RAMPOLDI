@@ -1,0 +1,46 @@
+# Database del CRM SomaMed: PostgreSQL 16 + pgvector (dati relazionali + vettori nello stesso posto).
+# È l'UNICO posto dove stanno i dati. Il servizio dati (servizio/) e l'interfaccia (interfaccia/) sono separati.
+#
+# "name" resta somamed-crm: così il volume dei dati (somamed-crm_crm_dati) è lo stesso della versione
+# precedente e i dati già inseriti si ritrovano senza fare nulla.
+name: somamed-crm
+
+services:
+  db:
+    image: pgvector/pgvector:0.8.0-pg16     # versione fissata: aggiornamenti solo quando lo decidi tu
+    container_name: somamed-crm-db
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: crm
+      POSTGRES_PASSWORD: ${CRM_DB_PASSWORD:-crm}
+      POSTGRES_DB: somamed_crm
+      TZ: Europe/Rome
+      PGTZ: Europe/Rome
+    command:
+      - postgres
+      - -c
+      - shared_buffers=256MB          # cache dei dati in memoria
+      - -c
+      - work_mem=16MB                 # ordinamenti e raggruppamenti senza usare il disco
+      - -c
+      - maintenance_work_mem=128MB    # creazione più veloce degli indici vettoriali
+      - -c
+      - max_connections=50            # margine per più utenti e per Claude
+      - -c
+      - idle_in_transaction_session_timeout=60000
+    ports:
+      - "127.0.0.1:5433:5432"         # solo da questo computer, non dalla rete
+    volumes:
+      - crm_dati:/var/lib/postgresql/data
+    shm_size: 256mb
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U crm -d somamed_crm"]
+      interval: 3s
+      timeout: 3s
+      retries: 30
+    logging:
+      driver: json-file
+      options: {max-size: "10m", max-file: "3"}
+
+volumes:
+  crm_dati:
