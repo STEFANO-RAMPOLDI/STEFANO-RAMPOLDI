@@ -12,6 +12,10 @@ P=$(command -v python3.14 || command -v python3.13 || command -v python3.12 || c
   || { echo "Il Mac non raggiunge pypi.org (dove si scaricano i pacchetti): controlla internet, spegni la VPN o prova un'altra rete, poi rilancia."; exit 1; }
 
 echo "2/5  Ambiente Python del servizio dati..."
+if [ -x "$PY" ] && ! "$PY" -c 'import sys; sys.exit(0 if (3,10) <= sys.version_info[:2] <= (3,14) else 1)' 2>/dev/null; then
+  echo "   l'ambiente esistente usa $("$PY" --version 2>&1): lo ricreo con $("$P" --version)"
+  mv servizio/.venv "servizio/.venv-vecchio-$(date +%s)"
+fi
 [ -x "$PY" ] || "$P" -m venv servizio/.venv
 servizio/.venv/bin/pip install -q --upgrade pip
 servizio/.venv/bin/pip install -q -r servizio/requirements.txt

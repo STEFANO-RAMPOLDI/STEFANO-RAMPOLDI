@@ -9,3 +9,4 @@ produzione/remoto.env
 produzione/utenti.caddy
 produzione/utenti.caddy.nuovo
 produzione/backup/
+servizio/.venv-vecchio-*/
