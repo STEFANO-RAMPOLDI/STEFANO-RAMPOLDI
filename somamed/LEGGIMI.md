@@ -31,7 +31,7 @@ somamed/
 ## Installazione (una volta sola, circa 10 minuti)
 
 1. Installa e apri **Docker Desktop** (docker.com).
-2. Verifica di avere **Python 3.10 o più recente** (Terminale: `python3 --version`; altrimenti `brew install python@3.12`).
+2. Installa **Python 3.13** da python.org (non la 3.14 o la 3.15: alcuni pacchetti potrebbero non funzionare ancora).
 3. Metti la cartella `somamed` dove vuoi tenerla, ad esempio nella tua cartella utente (`~/somamed`). **Non spostarla dopo l'installazione** (Claude Desktop la cerca lì).
 4. Nel Terminale: `cd ~/somamed` e poi `bash installa.sh`
 5. Chiudi Claude Desktop con Cmd+Q e riaprilo: nei connettori deve comparire **somamed-crm**.

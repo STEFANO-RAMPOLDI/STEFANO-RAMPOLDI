@@ -4,9 +4,9 @@ set -e
 . "$(dirname "$0")/_comune.sh"
 
 echo "1/5  Controllo Python..."
-P=$(command -v python3.12 || command -v python3.11 || command -v python3)
-"$P" -c 'import sys; sys.exit(0 if sys.version_info >= (3,10) else 1)' \
-  || { echo "Serve Python 3.10 o più recente (es. brew install python@3.12)."; exit 1; }
+P=$(command -v python3.13 || command -v python3.12 || command -v python3.11 || command -v python3)
+"$P" -c 'import sys; sys.exit(0 if (3,10) <= sys.version_info[:2] <= (3,13) else 1)' \
+  || { echo "Serve Python dalla 3.10 alla 3.13 (consigliata 3.13, da python.org). Trovato: $("$P" --version 2>&1)"; exit 1; }
 
 echo "2/5  Ambiente Python del servizio dati..."
 [ -x "$PY" ] || "$P" -m venv servizio/.venv
