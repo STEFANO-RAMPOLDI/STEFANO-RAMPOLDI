@@ -7,7 +7,7 @@ name: somamed-crm
 
 services:
   db:
-    image: pgvector/pgvector:0.8.0-pg16     # versione fissata: aggiornamenti solo quando lo decidi tu
+    image: pgvector/pgvector:0.8.7-pg16     # versione fissata: aggiornamenti solo quando lo decidi tu
     container_name: somamed-crm-db
     restart: unless-stopped
     environment:

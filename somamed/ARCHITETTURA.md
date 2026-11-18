@@ -39,7 +39,7 @@ Requisito: un database vettoriale open source di riferimento, locale, adatto a u
 | Componenti da gestire | 1 | 2 (+ un DB relazionale) | 3+ (etcd, MinIO) | 2 | 2 |
 | Scala adatta | fino a decine di milioni di vettori | centinaia di milioni | miliardi | centinaia di milioni | piccola |
 
-**Scelta: PostgreSQL 16 + pgvector 0.8** (immagine `pgvector/pgvector:0.8.0-pg16`, fissata).
+**Scelta: PostgreSQL 16 + pgvector 0.8** (immagine `pgvector/pgvector:0.8.7-pg16`, fissata).
 
 - Un CRM è prima di tutto relazionale (centri → persone → iniziative → attività → esiti). Con pgvector
   la nota e il suo vettore stanno nella stessa riga: niente sincronizzazione fra due database, niente

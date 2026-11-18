@@ -11,7 +11,7 @@ name: somamed
 
 services:
   db:
-    image: pgvector/pgvector:0.8.0-pg16
+    image: pgvector/pgvector:0.8.7-pg16
     restart: unless-stopped
     environment:
       POSTGRES_USER: crm
@@ -69,7 +69,7 @@ services:
     logging: {driver: json-file, options: {max-size: "10m", max-file: "3"}}
 
   backup:
-    image: pgvector/pgvector:0.8.0-pg16
+    image: pgvector/pgvector:0.8.7-pg16
     restart: unless-stopped
     environment:
       PGPASSWORD: ${DB_PASSWORD}

@@ -83,7 +83,7 @@ Poi **esci (`exit`) e rientra con ssh**: da lì in avanti i comandi `docker` e g
 ## Passo 6 — Prova
 
 Apri `https://crm.tuodominio.it`: il browser chiede utente e password, poi compare la Plancia (vuota).
-Controllo tecnico: `https://crm.tuodominio.it/api/salute` deve dire `"database":"ok"` e `"pgvector":"0.8.0"`.
+Controllo tecnico: `https://crm.tuodominio.it/api/salute` deve dire `"database":"ok"` e `"pgvector":"0.8.7"`.
 
 ## Passo 7 — Porta i dati del Mac online (una volta)
 

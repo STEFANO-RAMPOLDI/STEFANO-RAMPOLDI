@@ -2,8 +2,12 @@
 -- Le chiavi esterne (azienda_id, contatto_id, trattativa_id…) non avevano indici: ogni conteggio
 -- "quante persone / attività ha questo centro" leggeva l'intera tabella. Si può lanciare più volte.
 
--- porta l'estensione vettoriale alla versione installata nell'immagine Docker (0.8: ricerca filtrata migliore)
-ALTER EXTENSION vector UPDATE;
+-- porta l'estensione vettoriale alla versione installata nell'immagine Docker (0.8: ricerca filtrata migliore); se non è possibile si prosegue
+DO $$ BEGIN
+    ALTER EXTENSION vector UPDATE;
+EXCEPTION WHEN OTHERS THEN
+    RAISE NOTICE 'pgvector non aggiornato (%): si continua con la versione installata', SQLERRM;
+END $$;
 CREATE INDEX IF NOT EXISTS contatti_azienda        ON contatti (azienda_id);
 CREATE INDEX IF NOT EXISTS contatti_conosciuti     ON contatti (azienda_id) WHERE conosciuto_personalmente;
 CREATE INDEX IF NOT EXISTS attivita_azienda_stato  ON attivita (azienda_id, stato);

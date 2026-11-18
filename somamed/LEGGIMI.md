@@ -43,7 +43,7 @@ I dati **restano**: stanno nel volume Docker `somamed-crm_crm_dati`, che la nuov
 1. Ferma la vecchia interfaccia (Ctrl+C nella sua finestra del Terminale).
 2. Se avevi modificato `~/somamed-crm/config.env`, copia i tuoi valori nel nuovo `config.env` dopo l'installazione.
 3. `cd ~/somamed` e `bash installa.sh` — aggiorna anche il collegamento con Claude Desktop.
-4. Al primo avvio il database riceve l'aggiornamento **014** (indici e vista più veloce) e l'estensione pgvector passa alla 0.8. Prima di farlo, per prudenza: `bash backup.sh`.
+4. Al primo avvio il database riceve l'aggiornamento **014** (indici e vista più veloce) e l'estensione pgvector passa alla 0.8.7. Prima di farlo, per prudenza: `bash backup.sh`.
 5. Quando tutto funziona puoi cancellare la vecchia cartella `~/somamed-crm`.
 
 ## Uso quotidiano
