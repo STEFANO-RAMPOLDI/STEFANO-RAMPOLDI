@@ -8,6 +8,9 @@ P=$(command -v python3.14 || command -v python3.13 || command -v python3.12 || c
 "$P" -c 'import sys; sys.exit(0 if (3,10) <= sys.version_info[:2] <= (3,14) else 1)' \
   || { echo "Serve Python dalla 3.10 alla 3.14 (consigliata 3.14, da python.org; la 3.15 non è ancora supportata dai pacchetti). Trovato: $("$P" --version 2>&1)"; exit 1; }
 
+"$P" -c "import socket; socket.getaddrinfo('pypi.org', 443)" 2>/dev/null \
+  || { echo "Il Mac non raggiunge pypi.org (dove si scaricano i pacchetti): controlla internet, spegni la VPN o prova un'altra rete, poi rilancia."; exit 1; }
+
 echo "2/5  Ambiente Python del servizio dati..."
 [ -x "$PY" ] || "$P" -m venv servizio/.venv
 servizio/.venv/bin/pip install -q --upgrade pip
