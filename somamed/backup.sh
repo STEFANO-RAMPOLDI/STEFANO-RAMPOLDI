@@ -10,5 +10,5 @@ else
   pg_dump "$CRM_DSN" --clean --if-exists | gzip > "$F"
 fi
 ESITO=$?
-[ "$ESITO" = "0" ] && [ -s "$F" ] && gzip -t "$F" && echo "   copia salvata in $F" || { echo "Copia NON riuscita"; rm -f "$F"; exit 1; }
+[ "$ESITO" = "0" ] && gzip -t "$F" && gunzip -c "$F" | tail -5 | grep -q "PostgreSQL database dump complete" && echo "   copia salvata in $F" || { echo "Copia NON riuscita"; rm -f "$F"; exit 1; }
 ls -1t backup/somamed_crm_*.sql.gz 2>/dev/null | tail -n +31 | xargs rm -f 2>/dev/null   # tiene le ultime 30

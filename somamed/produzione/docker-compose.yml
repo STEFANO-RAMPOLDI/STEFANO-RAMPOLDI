@@ -1,0 +1,87 @@
+# CRM SomaMed ONLINE — tutto su un server Linux:  cd produzione && docker compose up -d --build
+#
+#   Internet ──HTTPS──▶ web (Caddy: certificato automatico, utente e password)
+#                         ├── /        → interfaccia/ (file statici)
+#                         └── /api/*   → servizio (API, non raggiungibile da fuori)
+#                                           └──▶ db (PostgreSQL + pgvector, non raggiungibile da fuori)
+#   backup: copia del database ogni notte in produzione/backup (tiene 14 giorni)
+#
+# Le impostazioni (dominio, password) stanno in produzione/.env — creato da installa_server.sh.
+name: somamed
+
+services:
+  db:
+    image: pgvector/pgvector:0.8.0-pg16
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: crm
+      POSTGRES_PASSWORD: ${DB_PASSWORD:?manca DB_PASSWORD in .env}
+      POSTGRES_DB: somamed_crm
+      TZ: Europe/Rome
+      PGTZ: Europe/Rome
+    command: [postgres, -c, shared_buffers=256MB, -c, work_mem=16MB, -c, maintenance_work_mem=128MB,
+              -c, max_connections=60, -c, idle_in_transaction_session_timeout=60000]
+    volumes:
+      - dati:/var/lib/postgresql/data
+    ports:
+      - "127.0.0.1:5432:5432"   # solo dal server stesso (serve al tunnel SSH per Claude Desktop)
+    shm_size: 256mb
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U crm -d somamed_crm"]
+      interval: 5s
+      timeout: 3s
+      retries: 30
+    logging: {driver: json-file, options: {max-size: "10m", max-file: "3"}}
+
+  servizio:
+    build:
+      context: ..
+      dockerfile: produzione/Dockerfile
+    restart: unless-stopped
+    environment:
+      CRM_DSN: postgresql://crm:${DB_PASSWORD}@db:5432/somamed_crm
+      CRM_TOKEN: ${CRM_TOKEN:?manca CRM_TOKEN in .env}
+      CRM_POOL_MAX: "15"
+      ANTHROPIC_API_KEY: ${ANTHROPIC_API_KEY:-}
+      CRM_AI_MODELLO: ${CRM_AI_MODELLO:-claude-sonnet-5-5}
+    depends_on:
+      db: {condition: service_healthy}
+    logging: {driver: json-file, options: {max-size: "10m", max-file: "3"}}
+
+  web:
+    image: caddy:2.10-alpine
+    restart: unless-stopped
+    ports:
+      - "80:80"
+      - "443:443"
+      - "443:443/udp"
+    environment:
+      DOMINIO: ${DOMINIO:?manca DOMINIO in .env}
+      CRM_TOKEN: ${CRM_TOKEN}
+    volumes:
+      - ./Caddyfile:/etc/caddy/Caddyfile:ro
+      - ./utenti.caddy:/etc/caddy/utenti.caddy:ro
+      - ./config.js:/srv/prod/config.js:ro
+      - ../interfaccia:/srv/interfaccia:ro
+      - caddy_dati:/data
+      - caddy_config:/config
+    depends_on: [servizio]
+    logging: {driver: json-file, options: {max-size: "10m", max-file: "3"}}
+
+  backup:
+    image: pgvector/pgvector:0.8.0-pg16
+    restart: unless-stopped
+    environment:
+      PGPASSWORD: ${DB_PASSWORD}
+      TZ: Europe/Rome
+    volumes:
+      - ./backup:/backup
+      - ./copia_notturna.sh:/copia_notturna.sh:ro
+    entrypoint: ["/bin/sh", "/copia_notturna.sh"]
+    depends_on:
+      db: {condition: service_healthy}
+
+volumes:
+  dati:
+  caddy_dati:
+  caddy_config:

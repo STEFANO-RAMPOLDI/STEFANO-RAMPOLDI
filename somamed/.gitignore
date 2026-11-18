@@ -4,3 +4,8 @@ registro/
 backup/
 __pycache__/
 *.pyc
+produzione/.env
+produzione/remoto.env
+produzione/utenti.caddy
+produzione/utenti.caddy.nuovo
+produzione/backup/

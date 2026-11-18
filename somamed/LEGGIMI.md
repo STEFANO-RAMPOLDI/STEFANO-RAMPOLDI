@@ -17,6 +17,7 @@ somamed/
 │   ├── index.html · mappa.json
 │   └── config.js     dice a quale servizio dati collegarsi
 ├── config.env     ← le tue impostazioni (creato all'installazione da config.env.esempio)
+├── produzione/    ← tutto per metterlo ONLINE (Docker, Caddy, HTTPS, utenti, backup): GUIDA_ONLINE.md
 └── installa.sh · avvia.sh · ferma.sh · stato.sh · aggiorna.sh · backup.sh · ripristina.sh
 ```
 
@@ -24,6 +25,8 @@ somamed/
 - **Interfaccia** e **servizio dati** si parlano solo tramite l'indirizzo in `interfaccia/config.js`.
 - Ognuna delle tre parti si può spostare su un'altra macchina cambiando una riga. I dettagli,
   la scelta del database vettoriale e i passi per l'uso da più utenti sono in **ARCHITETTURA.md**.
+
+**Per mettere il CRM online** (server, HTTPS, utenti e password): vedi **GUIDA_ONLINE.md**.
 
 ## Installazione (una volta sola, circa 10 minuti)
 

@@ -1,0 +1,9 @@
+servizio/.venv
+registro
+backup
+config.env
+produzione/.env
+produzione/backup
+produzione/utenti.caddy
+**/__pycache__
+produzione/remoto.env

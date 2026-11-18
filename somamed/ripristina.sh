@@ -3,6 +3,7 @@
 . "$(dirname "$0")/_comune.sh"
 [ -f "$1" ] || { echo "Indica il file: bash ripristina.sh backup/nome-del-file.sql.gz"; exit 1; }
 gzip -t "$1" || { echo "Il file è danneggiato."; exit 1; }
+gunzip -c "$1" | tail -5 | grep -q "PostgreSQL database dump complete" || { echo "La copia è incompleta o vuota: non la uso."; exit 1; }
 read -p "Il database attuale verrà sostituito dalla copia $1. Scrivi SI per continuare: " ok
 [ "$ok" = "SI" ] || { echo "Annullato."; exit 1; }
 if usa_docker; then

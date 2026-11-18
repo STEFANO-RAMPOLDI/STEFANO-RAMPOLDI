@@ -1,0 +1,40 @@
+# Porta d'ingresso del CRM SomaMed online: HTTPS automatico (Let's Encrypt) e accesso con utente e password.
+{$DOMINIO} {
+	encode zstd gzip
+
+	header {
+		Strict-Transport-Security "max-age=31536000"
+		X-Content-Type-Options nosniff
+		X-Frame-Options DENY
+		Referrer-Policy same-origin
+		-Server
+	}
+
+	# tutto è protetto da utente e password, tranne il controllo di salute (per il monitoraggio)
+	@protetto not path /api/salute
+	basic_auth @protetto {
+		import utenti.caddy
+	}
+
+	# dati: al servizio, che riceve la chiave interna e il nome dell'utente collegato
+	handle /api/* {
+		reverse_proxy servizio:8080 {
+			header_up X-CRM-Token {$CRM_TOKEN}
+			header_up X-CRM-Utente {http.auth.user.id}
+		}
+	}
+
+	# interfaccia: solo i suoi file (config.js è quello del server: i dati sono su questo stesso indirizzo)
+	handle /config.js {
+		root * /srv/prod
+		file_server
+	}
+	@pagina path / /index.html /mappa.json
+	handle @pagina {
+		root * /srv/interfaccia
+		file_server
+	}
+	handle {
+		respond "Non trovato" 404
+	}
+}
